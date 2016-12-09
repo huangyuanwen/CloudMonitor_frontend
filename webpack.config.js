@@ -4,7 +4,7 @@ var webpack = require('webpack')
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 // 设置生成css 的路径和文件名，会自动将对应entry入口js文件中引入的CSS抽出成单独的文件
 // var packCSS = new ExtractTextPlugin('./dist/[name].min.css');
-
+// var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
     entry: __dirname + '/src/main.js',
@@ -47,7 +47,7 @@ module.exports = {
         ]
     },
     plugins: [
-        // packCSS
+       // new HtmlWebpackPlugin()
     ],
     devServer: {
         historyApiFallback: true,

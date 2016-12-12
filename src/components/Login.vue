@@ -43,7 +43,7 @@
             }
         },
         ready(){
-//            GET_COOKIE('user')!=null?this.$router.go('home/task-watch'):this.$router.go('/');
+            GET_COOKIE('user')!=null?this.$router.go('home/task-watch'):this.$router.go('/');
         },
         methods:{
             login(){

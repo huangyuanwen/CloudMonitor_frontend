@@ -16,3 +16,10 @@ export const GET_COOKIE = function (name) {
     else
         return null;
 };
+export const DEL_COOKIE = function(name){
+    var exp = new Date();
+    exp.setTime(exp.getTime() - 1);
+    var cval=GET_COOKIE(name);
+    if(cval!=null)
+        document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+}

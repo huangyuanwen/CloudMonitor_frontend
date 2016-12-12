@@ -41,8 +41,8 @@
             }
         },
         ready(){
-            GET_COOKIE('user') == null ? this.$router.go('/') : "";
-            JSON.parse(GET_COOKIE('user')).role == 'root' ? this.$set('isRoot', '0') : this.$set('isRoot', '1')
+            GET_COOKIE('user') == null ? this.$router.go('/') :
+                    JSON.parse(GET_COOKIE('user')).role == 'root' ? this.$set('isRoot', '0') : this.$set('isRoot', '1')
         },
         methods: {
             logout(){

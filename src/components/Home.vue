@@ -35,7 +35,7 @@
 <script>
     import {GET_COOKIE, DEL_COOKIE} from '../js/cookie'
     export default {
-        data: function () {
+        data() {
             return {
                 isRoot: ''
             }

@@ -3,34 +3,34 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 删除任务组
-               <!-- <div class="text-right">
-                    <v-select :value.sync="selected" :options="options"></v-select>
-                </div>-->
+                <!-- <div class="text-right">
+                     <v-select :value.sync="selected" :options="options"></v-select>
+                 </div>-->
             </div>
             <div class="row wrapper">
-                    <table class="table">
-                        <tr>
-                            <td>按监控任务执行日期删除日志记录:</td>
-                            <td>执行日期</td>
-                            <td>
-                                <datepicker :value="state.date" :format="format" class="form-control"></datepicker>
-                            </td>
-                            <td>
-                                <a @click="del_day()">按天删除</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>按任务组删除所属全部监控任务日志:</td>
-                            <td>任务组</td>
-                            <td>
-                                <v-select :value.sync="group" multiple :options="options"></v-select>
-                            </td>
-                            <td><a @click="del_group()">按组删除</a></td>
-                        </tr>
-                        <tr>
-                            <td><a @click="del_all()">删除全部日志</a></td>
-                        </tr>
-                    </table>
+                <table class="table">
+                    <tr>
+                        <td>按监控任务执行日期删除日志记录:</td>
+                        <td>执行日期</td>
+                        <td>
+                            <datepicker :value="state.date" :format="format" class="form-control"></datepicker>
+                        </td>
+                        <td>
+                            <a @click="del_day()">按天删除</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>按任务组删除所属全部监控任务日志:</td>
+                        <td>任务组</td>
+                        <td>
+                            <v-select :value.sync="group" multiple :options="options"></v-select>
+                        </td>
+                        <td><a @click="del_group()">按组删除</a></td>
+                    </tr>
+                    <tr>
+                        <td><a @click="del_all()">删除全部日志</a></td>
+                    </tr>
+                </table>
             </div>
 
             <div class="panel-heading">
@@ -39,8 +39,9 @@
             <div class="row wrapper">
                 <div class="text-right">
                     <!--<v-select :value.sync="selected" :options="options"></v-select>-->
-                    <select class="form-control" v-model="selected" style="width: 200px;display: inline-block;margin-right: 15px">
-                        <option v-for="option in options" value="{{option}}" >{{option}}</option>
+                    <select class="form-control" v-model="selected"
+                            style="width: 200px;display: inline-block;margin-right: 15px">
+                        <option v-for="option in options" value="{{option}}">{{option}}</option>
                     </select>
                 </div>
                 <div class="table-responsive">
@@ -65,7 +66,7 @@
                         </tbody>
                     </table>
                     <!-- 页码栏 -->
-                    <div id="callBackPager" align="center"></div>
+                    <v-nav :cur.sync="cur" :all.sync="totalPage" v-on:btn-click="listen" class="text-center"></v-nav>
                 </div>
             </div>
         </div>
@@ -83,7 +84,7 @@
     import {GET_COOKIE} from '../js/cookie'
     import vSelect from 'vue-select'
     import Datepicker from 'vuejs-datepicker'
-
+    import vNav from './vue-nav.vue'
     var state = {
         date: new Date()
     };
@@ -92,7 +93,8 @@
         data(){
             return {
                 state: state,
-                curr: "",
+                cur: "",
+                totalPage:"",
                 table: [],
                 format: 'yyyy-MM-dd',
                 options: [],
@@ -100,38 +102,33 @@
                 group: ""
             }
         },
-        components: {vSelect, Datepicker},
+        components: {vSelect, Datepicker, vNav},
         ready(){
             this.GetGroup();
         },
         watch: {
             selected(val){
                 this.GetData(1, 10, val)
+            },
+            cur(val){
+                this.GetData(val, 10, this.selected)
             }
         },
         methods: {
+            listen(val){
+                this.GetData(val, 10, this.selected)
+            },
             GetGroup(){
                 this.$http.post(GET_GROUP_BY_USER, {"username": JSON.parse(GET_COOKIE('user')).username})
                         .then((response)=> {
                             var _self = this;
                             _self.$set('selected', response.data.data[0]);
                             _self.$set('options', response.data.data);
-//                            this.GetData(1, 10, this.selected)
                             //进入页面后第一次获取数据
-                            _self.GetData(1, 10, _self.selected, function (totalRecord) {
-                                $('#callBackPager').extendPagination({
-                                    totalCount: totalRecord,
-                                    showCount: 5,
-                                    limit: 10,
-                                    callback: function (curr, limit, totalCount) {
-                                        _self.$set('curr', curr);
-                                        _self.GetData(curr, limit, _self.selected);
-                                    }
-                                });
-                            });
+                            this.GetData(1, 10, this.selected);
                         })
             },
-            GetData(pageNo, pageSize, group, callback){
+            GetData(pageNo, pageSize, group){
                 this.$http.post(FIND_LOGS_PATH, {
                     "pageSize": pageSize,
                     "pageNum": pageNo,
@@ -139,9 +136,8 @@
                 })
                         .then(function (data) {
                             this.$set('table', data.body.data.data);
-                            if (typeof callback === 'function') {
-                                callback(data.body.data.totalRecord)
-                            }
+                            this.$set('cur', pageNo);
+                            this.$set('totalPage', data.body.data.totalPage);
                         })
             },
             del_day(){
@@ -182,7 +178,8 @@
         text-overflow: ellipsis;
         display: inline-block;
     }
-    .datepicker.form-control>input{
+
+    .datepicker.form-control > input {
         width: 100%;
         height: 100%;
         border: none;

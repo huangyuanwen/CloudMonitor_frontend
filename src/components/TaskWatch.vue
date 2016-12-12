@@ -115,82 +115,11 @@
                         </tbody>
                     </table>
                     <!-- 页码栏 -->
-                    <div id="callBackPager" align="center"></div>
+                    <v-nav :cur.sync="cur" :all.sync="totalPage" v-on:btn-click="listen" class="text-center"></v-nav>
                 </div>
             </div>
         </div>
     </div>
- <!--   <div class="row">
-        <div class="col-md-1">
-        </div>
-        <div class="col-md-3 col-md-offset-8">
-            &lt;!&ndash;<select class="form-control" v-model="selected">
-                <option v-for="option in options" v-bind:value="option">
-                    {{ option }}
-                </option>
-            </select>&ndash;&gt;
-            <v-select :value.sync="selected" :options="options"></v-select>
-        </div>
-    </div>
-    <div class="row">
-        <table class="table table-condensed">
-            <tr>
-                <td>任务ID</td>
-                <td><input type="text" class="form-control" v-model="edit_data.job_id"></td>
-                <td>任务描述</td>
-                <td><input type="text" class="form-control" v-model="edit_data.job_description"></td>
-                <td>任务组</td>
-                <td>
-                    &lt;!&ndash;<input type="text" class="form-control" v-model="edit_data.job_group">&ndash;&gt;
-                    <v-select :value.sync="edit_data.job_group" :options="options"></v-select>
-                </td>
-            </tr>
-            <tr>
-                <td>执行规则</td>
-                <td><input type="text" class="form-control" v-model="edit_data.cron_expression"></td>
-                <td>执行url</td>
-                <td><input type="text" class="form-control" v-model="edit_data.url"></td>
-                <td>请求方式</td>
-                <td><input type="text" class="form-control" v-model="edit_data.method"></td>
-            </tr>
-            <tr>
-                <td>请求JSON</td>
-                <td><input type="text" class="form-control" v-model="edit_data.json"></td>
-                <td>邮件接收人</td>
-                <td>
-                    &lt;!&ndash;<input type="text" class="form-control" v-model="edit_data.mailto">&ndash;&gt;
-                    <v-select :value.sync="edit_data.mailto" multiple :options="userList"></v-select>
-                </td>
-                <td>邮件抄送人</td>
-                <td>
-                    &lt;!&ndash;<input type="text" class="form-control" v-model="edit_data.mailcc">&ndash;&gt;
-                    <v-select :value.sync="edit_data.mailcc" multiple :options="userList"></v-select>
-                </td>
-            </tr>
-            <tr>
-                <td>邮件密送人</td>
-                <td>
-                    &lt;!&ndash;<input type="text" class="form-control" v-model="edit_data.mailbcc">&ndash;&gt;
-                    <v-select :value.sync="edit_data.mailbcc" multiple :options="userList"></v-select>
-                </td>
-                <td>邮件主题</td>
-                <td><input type="text" class="form-control" v-model="edit_data.subject"></td>
-                <td>短信接收人</td>
-                <td>
-                    &lt;!&ndash;<input type="text" class="form-control" v-model="edit_data.smsto">&ndash;&gt;
-                    <v-select :value.sync="edit_data.smsto" multiple :options="userList"></v-select>
-                </td>
-            </tr>
-            <tr>
-                <td>正则限定</td>
-                <td><input type="text" class="form-control" v-model="edit_data.regex"></td>
-                <td>
-                    <button class="btn btn-default" @click="save()">保存</button>
-                </td>
-            </tr>
-        </table>
-    </div>-->
-
 </template>
 <script>
     import {
@@ -204,11 +133,13 @@
     } from '../common-path';
     import {GET_COOKIE} from '../js/cookie'
     import vSelect from 'vue-select'
+    import vNav from './vue-nav.vue'
     export default {
-        components: {vSelect},
+        components: {vSelect,vNav},
         data(){
             return {
-                curr: "",
+                cur: "",
+                totalPage:"",
                 editr: false,
                 selected: '',
                 options: [],
@@ -240,9 +171,15 @@
         watch: {
             selected(val){
                 this.GetData(1, 10, val)
+            },
+            cur(val){
+                this.GetData(val, 10, this.selected);
             }
         },
         methods: {
+            listen(val){
+                GetData(val,10,this.selected);
+            },
             GetUser(){
                 this.$http.post(FIND_ALL_USER_PATH)
                         .then(function (data) {
@@ -255,32 +192,20 @@
                             var _self = this;
                             _self.$set('selected', response.data.data[0]);
                             _self.$set('options', response.data.data);
-//                            this.GetData(1, 10, this.selected)
                             //进入页面后第一次获取数据
-                            _self.GetData(1, 10, _self.selected, function (totalRecord) {
-                                $('#callBackPager').extendPagination({
-                                    totalCount: totalRecord,
-                                    showCount: 5,
-                                    limit: 10,
-                                    callback: function (curr, limit, totalCount) {
-                                        _self.$set('curr', curr);
-                                        _self.GetData(curr, limit, _self.selected);
-                                    }
-                                });
-                            });
+                            this.GetData(1, 10, this.selected);
                         })
             },
-            GetData(pageNo, pageSize, group, callback){
+            GetData(pageNo, pageSize, group){
                 this.$http.post(FIND_WITH_PAGE_AND_GROUP, {
                     "pageSize": pageSize,
                     "pageNum": pageNo,
                     "jobGroup": group
                 })
                         .then(function (data) {
+                            this.$set('cur',pageNo);
+                            this.$set('totalPage',data.body.data.totalPage);
                             this.$set('table', data.body.data.data);
-                            if (typeof callback === 'function') {
-                                callback(data.body.data.totalRecord)
-                            }
                         })
             },
             add(){
@@ -300,20 +225,20 @@
                 this.$http.post(SAVE_PATH, key ? this.table[key] : this.edit_data)
                         .then((response)=> {
                             this.$set('edit_data', {});
-                            this.GetData(1, 10, this.selected);
+                            this.GetData(this.cur, 10, this.selected);
                             this.$set('editr', false);
                         })
             },
             start(id){
                 this.$http.post(START_PATH, {"job_id": id})
                         .then((response)=> {
-                            this.GetData(1, 10, this.selected)
+                            this.GetData(this.cur, 10, this.selected)
                         })
             },
-            stop(){
-                this.$http.post(STOP_PATH, {"job_id": id})
+            stop(id){
+                this.$http.post(STOP_PATH, {"job_id": id,"job_group":this.selected})
                         .then((response)=> {
-                            this.GetData(1, 10, this.selected)
+                            this.GetData(this.cur, 10, this.selected)
                         })
             },
             remove(id, group, status){
@@ -324,7 +249,7 @@
                 })
                         .then((response)=> {
                             var _self = this;
-                            _self.GetData(_self.curr, 10, _self.selected);
+                            _self.GetData(_self.cur, 10, _self.selected);
                         })
             }
         }

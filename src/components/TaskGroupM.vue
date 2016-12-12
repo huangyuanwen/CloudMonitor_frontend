@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-on="http://www.w3.org/1999/xhtml">
     <div class="wrapper-md">
         <div class="panel panel-default">
             <!--<div class="panel-heading">
@@ -6,7 +6,8 @@
             </div>-->
             <div class="row wrapper">
                 <div class="col-sm-5 m-b-xs dropdown open">
-                    <button style="width: 200px" type="button" class="btn btn-default dropdown-toggle" @click="opendropdown()">
+                    <button style="width: 200px" type="button" class="btn btn-default dropdown-toggle"
+                            @click="opendropdown()">
                         {{selected}}<span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" v-show="open" role="menu">
@@ -55,11 +56,7 @@
                 </table>
             </div>
             <footer class="panel-footer">
-                <div class="row">
-                    <div class="col-sm-4 text-right text-center-xs">
-                        <div id="callBackPager"></div>
-                    </div>
-                </div>
+                <v-nav :cur.sync="cur" :all.sync="totalPage" v-on:btn-click="listen" class="text-center"></v-nav>
             </footer>
         </div>
     </div>
@@ -73,51 +70,48 @@
             ADD_USER_INSER_GROUP,
             FIND_USER_BY_GROUP
     } from '../common-path';
-
+    import vNav from './vue-nav.vue'
     export default{
+        components: {vNav},
         data(){
             return {
                 groupName: "",
                 all_group: [],
-                user_by_group:[],
+                user_by_group: [],
                 edit: true,
-                curr: 1,
+                cur: "",
+                totalPage: "",
                 selected: "",
                 open: false
             }
         },
         ready(){
-          this.GetAllGroup();
+            this.GetAllGroup();
         },
         watch: {
             selected(val){
                 this.find_user_by_group(1, 10, val)
+            },
+            cur(val){
+                this.find_user_by_group(val, 10, this.selected)
             }
         },
         methods: {
+            listen(val){
+                this.find_user_by_group(val, 10, this.selected)
+            },
             addGroup(){
                 this.$http.post(ADD_NEW_GROUP, {jobGroup: this.groupName}).then((response)=> {
                     var _self = this;
-                    _self.GetAllGroup(_self.curr, 10);
+                    _self.GetAllGroup(_self.cur, 10);
                 })
             },
             GetAllGroup(){
                 var _self = this;
                 _self.$http.post(ALL_GROUP).then((response)=> {
-                    _self.$set('selected',response.data.data[0].job_group)
+                    _self.$set('selected', response.data.data[0].job_group)
                     _self.$set('all_group', response.data.data);
-
-                    _self.find_user_by_group(1,10, _self.selected,function (totalRecord) {
-                        $('#callBackPager').extendPagination({
-                            totalCount: totalRecord,
-                            showCount: 5,
-                            limit: 10,
-                            callback: function (curr, limit, totalCount) {
-                                _self.$set('curr', curr);
-                                _self.GetData(curr, limit, _self.selected);
-                            }
-                        });
-                    })
+                    this.find_user_by_group(1, 10, _self.selected);
                 })
             },
             editFunc(){
@@ -126,14 +120,14 @@
             update(key){
                 var _self = this;
                 _self.$http.post(GROUP_UPDATE, this.all_group[key]).then((resonse)=> {
-                    _self.GetAllGroup(_self.curr, 10);
+                    _self.GetAllGroup(_self.cur, 10);
                     this.$set('edit', true);
                 })
             },
             del(name){
                 var _self = this;
                 _self.$http.post(DELETE_GROUP, {jobGroup: name}).then((resonse)=> {
-                    _self.GetAllGroup(_self.curr, 10);
+                    _self.GetAllGroup(_self.cur, 10);
                 })
             },
             opendropdown(){
@@ -142,17 +136,16 @@
             select(val){
                 this.$set('selected', val);
             },
-            find_user_by_group(pageNum,pageSize,jobGroup,callback){
+            find_user_by_group(pageNum, pageSize, jobGroup){
                 var _self = this;
-                _self.$http.post(FIND_USER_BY_GROUP,{
-                    pageNum:pageNum,
-                    pageSize:pageSize,
-                    jobGroup:jobGroup,
-                }).then((respones)=>{
-                    _self.$set('user_by_group',respones.data.data.data)
-                    if(typeof callback === "function"){
-                        callback(respones)
-                    }
+                _self.$http.post(FIND_USER_BY_GROUP, {
+                    pageNum: pageNum,
+                    pageSize: pageSize,
+                    jobGroup: jobGroup,
+                }).then((respones)=> {
+                    _self.$set('cur', pageNum);
+                    _self.$set('totalPage', respones.data.data.totalPage);
+                    _self.$set('user_by_group', respones.data.data.data);
                 })
             }
 

@@ -38,7 +38,7 @@
                         <thead>
                         <tr>
                             <th>用户名</th>
-                            <th>密码</th>
+                            <!--<th>密码</th>-->
                             <th>手机号</th>
                             <th>邮件</th>
                             <th>操作</th>
@@ -50,10 +50,10 @@
                                 <span v-show="edit">{{user.username}}</span>
                                 <span v-show="!edit"><input type="text" v-model="user.username"></span>
                             </td>
-                            <td>
+                          <!--  <td>
                                 <span v-show="edit" class="lang">{{user.password}}</span>
                                 <span v-show="!edit"><input type="text" v-model="user.password"></span>
-                            </td>
+                            </td>-->
                             <td>
                                 <span v-show="edit">{{user.phone}}</span>
                                 <span v-show="!edit"><input type="text" v-model="user.phone"></span>

@@ -1,17 +1,15 @@
-var path = require('path')
-var webpack = require('webpack')
+var path = require('path');
+var webpack = require('webpack');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 // 引入css 单独打包插件
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-// 设置生成css 的路径和文件名，会自动将对应entry入口js文件中引入的CSS抽出成单独的文件
-// var packCSS = new ExtractTextPlugin('./dist/[name].min.css');
-// var HtmlWebpackPlugin = require('html-webpack-plugin')
+// require('./src/css/app.css');
+// require('./src/css/bootstrap.min.css');
 
 module.exports = {
     entry: __dirname + '/src/main.js',
     output: {
         path: path.resolve(__dirname, './dist'),
-        publicPath: '/dist/',
-        filename: 'build.js'
+        filename: '[name].[hash].build.js'
     },
     module: {
         loaders: [
@@ -24,9 +22,8 @@ module.exports = {
                 loader: 'babel',
                 exclude: /node_modules/
             },
-            {
-                test: /\.css$/,
-                loaders: ['style', 'css']
+            { test: /\.css$/,
+                loader: 'style-loader!css-loader'
             },
             {
                 test: /\.json$/,
@@ -47,7 +44,22 @@ module.exports = {
         ]
     },
     plugins: [
-       // new HtmlWebpackPlugin()
+        new HtmlWebpackPlugin({
+            inject: true,
+            template: 'index.html',
+            minify: {
+                removeComments: true,
+                collapseWhitespace: true,
+                removeRedundantAttributes: true,
+                useShortDoctype: true,
+                removeEmptyAttributes: true,
+                removeStyleLinkTypeAttributes: true,
+                keepClosingSlash: true,
+                minifyJS: true,
+                minifyCSS: true,
+                minifyURLs: true
+            }
+        })
     ],
     devServer: {
         historyApiFallback: true,

@@ -8,7 +8,6 @@
                 </div>-->
             </div>
             <div class="row wrapper">
-                <div class="table-responsive">
                     <table class="table">
                         <tr>
                             <td>按监控任务执行日期删除日志记录:</td>
@@ -32,7 +31,6 @@
                             <td><a @click="del_all()">删除全部日志</a></td>
                         </tr>
                     </table>
-                </div>
             </div>
 
             <div class="panel-heading">
@@ -40,7 +38,10 @@
             </div>
             <div class="row wrapper">
                 <div class="text-right">
-                    <v-select :value.sync="selected" :options="options"></v-select>
+                    <!--<v-select :value.sync="selected" :options="options"></v-select>-->
+                    <select class="form-control" v-model="selected" style="width: 200px;display: inline-block;margin-right: 15px">
+                        <option v-for="option in options" value="{{option}}" >{{option}}</option>
+                    </select>
                 </div>
                 <div class="table-responsive">
                     <table class="table">
@@ -180,5 +181,10 @@
         overflow: hidden;
         text-overflow: ellipsis;
         display: inline-block;
+    }
+    .datepicker.form-control>input{
+        width: 100%;
+        height: 100%;
+        border: none;
     }
 </style>

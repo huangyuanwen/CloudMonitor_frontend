@@ -89,6 +89,11 @@
         ready(){
           this.GetAllGroup();
         },
+        watch: {
+            selected(val){
+                this.find_user_by_group(1, 10, val)
+            }
+        },
         methods: {
             addGroup(){
                 this.$http.post(ADD_NEW_GROUP, {jobGroup: this.groupName}).then((response)=> {
@@ -144,7 +149,6 @@
                     pageSize:pageSize,
                     jobGroup:jobGroup,
                 }).then((respones)=>{
-                    console.log(JSON.stringify(respones.data))
                     _self.$set('user_by_group',respones.data.data.data)
                     if(typeof callback === "function"){
                         callback(respones)

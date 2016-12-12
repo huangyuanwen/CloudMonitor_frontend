@@ -1,8 +1,7 @@
 <template xmlns:v-bind="http://www.w3.org/1999/xhtml">
     <div class="wrapper-md">
         <div class="panel panel-default">
-            <div class="wrapper row">
-                <div class="table-responsive">
+            <div class="wrapper">
                     <table class="table table-condensed">
                         <tr>
                             <td>任务ID</td>
@@ -59,7 +58,6 @@
                             </td>
                         </tr>
                     </table>
-                </div>
             </div>
         </div>
         <div class="panel panel-default">

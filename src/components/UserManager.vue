@@ -4,7 +4,7 @@
             <div class="panel-heading">
                 新增用户
             </div>
-            <div class="row wrapper">
+            <div class="wrapper">
                 <div class="table-responsive">
                     <table class="table">
                         <tr>

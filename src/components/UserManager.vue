@@ -120,7 +120,7 @@
         },
         methods: {
             //监听页码变化
-            listen: function (data) {
+            listen(data) {
                 this.GetAllUser(data, 10);
             },
             //获取所有用户

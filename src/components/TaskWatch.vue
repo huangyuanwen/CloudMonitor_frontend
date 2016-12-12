@@ -189,7 +189,7 @@
             GetGroup(){
                 this.$http.post(GET_GROUP_BY_USER, {"username": JSON.parse(GET_COOKIE('user')).username})
                         .then((response)=> {
-                            var _self = this;
+                            let _self = this;
                             _self.$set('selected', response.data.data[0]);
                             _self.$set('options', response.data.data);
                             //进入页面后第一次获取数据
@@ -221,7 +221,7 @@
                 this.$set('editr', true);
             },
             save(key){
-//                var key = key || "";
+//                let key = key || "";
                 this.$http.post(SAVE_PATH, key ? this.table[key] : this.edit_data)
                         .then((response)=> {
                             this.$set('edit_data', {});
@@ -248,7 +248,7 @@
                     'job_status': status
                 })
                         .then((response)=> {
-                            var _self = this;
+                            let _self = this;
                             _self.GetData(_self.cur, 10, _self.selected);
                         })
             }

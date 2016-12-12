@@ -47,7 +47,7 @@
         },
         methods:{
             login(){
-                var vm = this;
+                let vm = this;
                 vm.$http.post(USER_LOGIN_PATH, vm.data,{'content-type':'x-www-form-urlencoded'})
                         .then((response) => {
                             response.body.code==200?this.$router.go('home/task-watch'):alert('登录失败');

@@ -102,12 +102,12 @@
             },
             addGroup(){
                 this.$http.post(ADD_NEW_GROUP, {jobGroup: this.groupName}).then((response)=> {
-                    var _self = this;
+                    let _self = this;
                     _self.GetAllGroup(_self.cur, 10);
                 })
             },
             GetAllGroup(){
-                var _self = this;
+                let _self = this;
                 _self.$http.post(ALL_GROUP).then((response)=> {
                     _self.$set('selected', response.data.data[0].job_group)
                     _self.$set('all_group', response.data.data);
@@ -118,14 +118,14 @@
                 this.$set('edit', false);
             },
             update(key){
-                var _self = this;
+                let _self = this;
                 _self.$http.post(GROUP_UPDATE, this.all_group[key]).then((resonse)=> {
                     _self.GetAllGroup(_self.cur, 10);
                     this.$set('edit', true);
                 })
             },
             del(name){
-                var _self = this;
+                let _self = this;
                 _self.$http.post(DELETE_GROUP, {jobGroup: name}).then((resonse)=> {
                     _self.GetAllGroup(_self.cur, 10);
                 })
@@ -137,7 +137,7 @@
                 this.$set('selected', val);
             },
             find_user_by_group(pageNum, pageSize, jobGroup){
-                var _self = this;
+                let _self = this;
                 _self.$http.post(FIND_USER_BY_GROUP, {
                     pageNum: pageNum,
                     pageSize: pageSize,

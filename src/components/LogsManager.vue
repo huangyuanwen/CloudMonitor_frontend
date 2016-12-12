@@ -85,7 +85,7 @@
     import vSelect from 'vue-select'
     import Datepicker from 'vuejs-datepicker'
     import vNav from './vue-nav.vue'
-    var state = {
+    let state = {
         date: new Date()
     };
 
@@ -121,7 +121,7 @@
             GetGroup(){
                 this.$http.post(GET_GROUP_BY_USER, {"username": JSON.parse(GET_COOKIE('user')).username})
                         .then((response)=> {
-                            var _self = this;
+                            let _self = this;
                             _self.$set('selected', response.data.data[0]);
                             _self.$set('options', response.data.data);
                             //进入页面后第一次获取数据
@@ -141,9 +141,9 @@
                         })
             },
             del_day(){
-                var _self = this;
-                var d = new Date(this.state.date)
-                var date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+                let _self = this;
+                let d = new Date(this.state.date)
+                let date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
                 this.$http.post(DELETE_LOGS_DAY_PATH, {day: date}).then((respones)=> {
                     alert('已删除');
                     _self.GetGroup();
@@ -151,7 +151,7 @@
 
             },
             del_group(){
-                var _self = this;
+                let _self = this;
                 this.$http.post(DELETE_LOGS_GROUP_PATH, {jobGroup: this.group}).then((respones)=> {
                     alert('已删除');
                     _self.GetGroup();
@@ -159,7 +159,7 @@
 
             },
             del_all(){
-                var _self = this;
+                let _self = this;
                 this.$http.post(DELETE_LOGS_ALL_PATH).then((respones)=> {
                     alert('已删除')
                     _self.GetGroup();

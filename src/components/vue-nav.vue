@@ -19,25 +19,25 @@
         },
         computed: {
             indexs() {
-                var left = 1
-                var right = this.all
-                var ar = []
+                let left = 1;
+                let right = this.all;
+                let ar = [];
                 if (this.all >= 11) {
                     if (this.cur > 5 && this.cur < this.all - 4) {
-                        left = this.cur - 5
+                        left = this.cur - 5;
                         right = this.cur + 4
                     } else {
                         if (this.cur <= 5) {
-                            left = 1
+                            left = 1;
                             right = 10
                         } else {
-                            right = this.all
+                            right = this.all;
                             left = this.all -9
                         }
                     }
                 }
                 while (left <= right) {
-                    ar.push(left)
+                    ar.push(left);
                     left ++
                 }
                 return ar
@@ -46,7 +46,7 @@
         methods: {
             btnClick(data) {
                 if (data != this.cur) {
-                    this.cur = data
+                    this.cur = data;
                     this.$dispatch('btn-click',data)
                 }
             }

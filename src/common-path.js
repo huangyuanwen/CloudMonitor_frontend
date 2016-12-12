@@ -7,6 +7,7 @@
  * prod .
  * @type {string}
  */
+// const PORXY_URL = "./CloudMonitor";
 const PORXY_URL = ".";
 /**
  * 登陆接口配置

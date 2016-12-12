@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var CleanPlugin = require('clean-webpack-plugin'); //清理文件夹
 // 引入css 单独打包插件
 // require('./src/css/app.css');
 // require('./src/css/bootstrap.min.css');
@@ -9,7 +10,7 @@ module.exports = {
     entry: __dirname + '/src/main.js',
     output: {
         path: path.resolve(__dirname, './dist'),
-        // publicPath: '/dist/',
+        // publicPath: '/dist/',// html中嵌入的script的src的路径
         filename: '[name].[hash].build.js'
     },
     module: {
@@ -23,7 +24,8 @@ module.exports = {
                 loader: 'babel',
                 exclude: /node_modules/
             },
-            { test: /\.css$/,
+            {
+                test: /\.css$/,
                 loader: 'style-loader!css-loader'
             },
             {
@@ -45,6 +47,8 @@ module.exports = {
         ]
     },
     plugins: [
+        //清空输出目录
+        new CleanPlugin(['dist']),
         new HtmlWebpackPlugin({
             inject: true,
             template: 'index.html',

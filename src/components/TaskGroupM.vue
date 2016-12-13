@@ -123,7 +123,8 @@
             GetAllGroup(){
                 let _self = this;
                 _self.$http.post(ALL_GROUP).then((response)=> {
-                    _self.$set('selected', response.data.data[0].job_group)
+                    console.log(response.data.data[0])
+                    _self.$set('selected', response.data.data[0]?response.data.data[0].job_group:"");
                     _self.$set('all_group', response.data.data);
                     //  this.find_user_by_group(1, 10, _self.selected);
                 })
@@ -182,6 +183,7 @@
                 }).then((response)=> {
                     JSON.stringify(response.body.code) == 0 ? alert(JSON.stringify(response.body.error)) : alert('success!');
                     this.find_user_by_group(1, 10, this.selected);
+                    this.$set('selected_user',[]);
                 })
             }
 

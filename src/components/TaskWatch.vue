@@ -225,6 +225,23 @@
                             this.$set('edit_data', {});
                             this.GetData(this.cur, 10, this.selected);
                             this.$set('editr', false);
+                            this.$set('edit_data', {
+                                cron_expression: "",
+                                id: 0,
+                                job_description: "",
+                                job_group: "",
+                                job_id: "",
+                                job_status: 0,
+                                json: "",
+                                mailbcc: "",
+                                mailcc: "",
+                                mailto: "",
+                                method: "",
+                                regex: "",
+                                smsto: "",
+                                subject: "",
+                                url: "",
+                            });
                         })
             },
             start(id){

@@ -151,6 +151,12 @@
                 this.$http.post(USER_INSERT, this.new_user).then((respones)=> {
                     alert('success')
                     this.GetAllUser(this.cur, 10)
+                    this.$set('new_user',{
+                        username: "",
+                        password: "",
+                        email: "",
+                        phone: ""
+                    },)
                 });
             }
         }

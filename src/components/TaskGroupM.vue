@@ -57,7 +57,7 @@
                         <td>{{user.email}}</td>
                         <td>{{user.phone}}</td>
                         <td>
-                            <a @click="del_user(user.job_group)">删除</a>
+                            <a @click="del_user(user.username)">删除</a>
                         </td>
                     </tr>
                     </tbody>

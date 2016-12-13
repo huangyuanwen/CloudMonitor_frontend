@@ -134,8 +134,8 @@
             //删除用户
             del(name){
                 this.$http.post(USER_DELETE, {username: name}).then((respones)=> {
-                    alert('success!');
                     this.GetAllUser(this.cur, 10)
+                    JSON.stringify(response.body.code) == 0 ? alert(JSON.stringify(response.body.error)) : alert('success!');
                 })
             },
             editFn(){
@@ -143,13 +143,13 @@
             },
             update(key){
                 this.$http.post(USER_INSERT, this.all_user[key]).then((respones)=> {
-                    alert('success!')
+                    JSON.stringify(response.body.code) == 0 ? alert(JSON.stringify(response.body.error)) : alert('success!');
                     this.GetAllUser(this.cur, 10)
                 });
             },
             add(){
                 this.$http.post(USER_INSERT, this.new_user).then((respones)=> {
-                    alert('success')
+                    JSON.stringify(response.body.code) == 0 ? alert(JSON.stringify(response.body.error)) : alert('success!');
                     this.GetAllUser(this.cur, 10)
                     this.$set('new_user',{
                         username: "",

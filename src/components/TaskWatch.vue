@@ -20,13 +20,15 @@
                             <td>执行url</td>
                             <td><input type="text" class="form-control" v-model="edit_data.url"></td>
                             <td>请求方式</td>
-                            <td><input type="text" class="form-control" v-model="edit_data.method"></td>
+                            <td>
+                                <!--<input type="text" class="form-control" v-model="edit_data.method">-->
+                                <v-select :value.sync="edit_data.method" :options="['GET','POST','DELETE','PUT']"></v-select>
+                            </td>
                         </tr>
                         <tr>
                             <td>请求JSON</td>
                             <td>
-                                <!--<input type="text" class="form-control" v-model="edit_data.json">-->
-                                <v-select :value.sync="edit_data.json" :options="['GET','POST','DELETE','PUT']"></v-select>
+                                <input type="text" class="form-control" v-model="edit_data.json">
                             </td>
                             <td>邮件接收人</td>
                             <td>
@@ -213,6 +215,7 @@
                 this.$set('edit_data', {});
                 this.$http.post(SAVE_PATH, this.edit_data)
                         .then((response)=> {
+                            JSON.stringify(response.body.code) == 0 ? alert(JSON.stringify(response.body.error)) : alert('success!');
                             this.$set('edit_data', {});
                             this.GetData(1, 10, this.selected);
                         })

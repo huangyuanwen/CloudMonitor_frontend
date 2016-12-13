@@ -13,6 +13,14 @@ module.exports = {
         // publicPath: '/dist/',// html中嵌入的script的src的路径
         filename: '[name].[hash].build.js'
     },
+    resolve: {
+        alias: {
+            echarts$: "echarts/src/echarts.js",
+            echarts: "echarts/src",
+            zrender$: "zrender/src/zrender.js",
+            zrender: "zrender/src"
+        }
+    },
     module: {
         loaders: [
             {

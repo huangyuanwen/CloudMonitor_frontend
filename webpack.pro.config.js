@@ -10,7 +10,7 @@ module.exports = {
     entry: __dirname + '/src/main.js',
     output: {
         path: path.resolve(__dirname, './dist'),
-        publicPath: '/dist/',// html中嵌入的script的src的路径
+        publicPath: 'dist/',// html中嵌入的script的src的路径
         filename: '[name].[hash].build.js'
     },
     module: {

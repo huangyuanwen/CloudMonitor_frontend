@@ -50,7 +50,7 @@
                 let vm = this;
                 vm.$http.post(USER_LOGIN_PATH, vm.data,{'content-type':'x-www-form-urlencoded'})
                         .then((response) => {
-                            response.body.code==200?this.$router.go('home/task-watch'):alert('登录失败');
+                            response.body.code==1?this.$router.go('home/task-watch'):alert(response.body.error);
                             //将用户信息存入cookie
                             SET_COOKIE('user',JSON.stringify(response.body.user))
                         })

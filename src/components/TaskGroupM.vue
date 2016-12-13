@@ -118,6 +118,7 @@
                 this.$http.post(ADD_NEW_GROUP, {jobGroup: this.groupName}).then((response)=> {
                     let _self = this;
                     _self.GetAllGroup();
+                    this.$set('groupName','');
                 })
             },
             GetAllGroup(){

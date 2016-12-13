@@ -215,7 +215,7 @@
                 this.$set('edit_data', {});
                 this.$http.post(SAVE_PATH, this.edit_data)
                         .then((response)=> {
-                            JSON.stringify(response.body.code) == 0 ? alert(JSON.stringify(response.body.error)) : alert('success!');
+                            response.body.code == 0 ? alert(response.body.error): alert('success!');
                             this.$set('edit_data', {});
                             this.GetData(1, 10, this.selected);
                         })
@@ -231,6 +231,7 @@
                             this.$set('edit_data', {});
                             this.GetData(this.cur, 10, this.selected);
                             this.$set('editr', false);
+                            response.body.code == 0 ? alert(response.body.error): alert('success!');
                             this.$set('edit_data', {
                                 cron_expression: "",
                                 id: 0,
@@ -253,12 +254,14 @@
             start(id){
                 this.$http.post(START_PATH, {"job_id": id})
                         .then((response)=> {
+                            response.body.code == 0 ? alert(response.body.error): alert('success!');
                             this.GetData(this.cur, 10, this.selected)
                         })
             },
             stop(id){
                 this.$http.post(STOP_PATH, {"job_id": id,"job_group":this.selected})
                         .then((response)=> {
+                            response.body.code == 0 ? alert(response.body.error): alert('success!');
                             this.GetData(this.cur, 10, this.selected)
                         })
             },
@@ -269,6 +272,7 @@
                     'job_status': status
                 })
                         .then((response)=> {
+                            response.body.code == 0 ? alert(response.body.error): alert('success!');
                             let _self = this;
                             _self.GetData(_self.cur, 10, _self.selected);
                         })

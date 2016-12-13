@@ -118,13 +118,13 @@
                 this.$http.post(ADD_NEW_GROUP, {jobGroup: this.groupName}).then((response)=> {
                     let _self = this;
                     _self.GetAllGroup();
+                    response.body.code == 0 ? alert(response.body.error): alert('success!');
                     this.$set('groupName','');
                 })
             },
             GetAllGroup(){
                 let _self = this;
                 _self.$http.post(ALL_GROUP).then((response)=> {
-                    console.log(response.data.data[0])
                     _self.$set('selected', response.data.data[0]?response.data.data[0].job_group:"");
                     _self.$set('all_group', response.data.data);
                     //  this.find_user_by_group(1, 10, _self.selected);
@@ -135,22 +135,23 @@
             },
             update(key){
                 let _self = this;
-                _self.$http.post(GROUP_UPDATE, this.all_group[key]).then((resonse)=> {
+                _self.$http.post(GROUP_UPDATE, this.all_group[key]).then((response)=> {
                     _self.GetAllGroup();
+                    response.body.code == 0 ? alert(response.body.error): alert('success!');
                     this.$set('edit', true);
                 })
             },
             del_user(name){
                 let _self = this;
                 _self.$http.post(DELETD_USER_GROUP, {username: name, jobGroup: this.selected}).then((response)=> {
-                    JSON.stringify(response.body.code) == 0 ? alert(JSON.stringify(response.body.error)) : alert('success!');
+                    response.body.code == 0 ? alert(response.body.error): alert('success!');
                     _self.find_user_by_group(_self.cur, 10,_self.selected);
                 })
             },
             del_group(groupname){
                 let _self = this;
                 _self.$http.post(DELETE_GROUP, {jobGroup: groupname}).then((response)=> {
-                    JSON.stringify(response.body.code) == 0 ? alert(JSON.stringify(response.body.error)) : alert('success!');
+                    response.body.code == 0 ? alert(response.body.error): alert('success!');
                     _self.GetAllGroup();
                 })
             },
@@ -182,7 +183,7 @@
                     "username": this.selected_user,
                     "job_group": this.selected
                 }).then((response)=> {
-                    JSON.stringify(response.body.code) == 0 ? alert(JSON.stringify(response.body.error)) : alert('success!');
+                    response.body.code == 0 ? alert(response.body.error): alert('success!');
                     this.find_user_by_group(1, 10, this.selected);
                     this.$set('selected_user',[]);
                 })

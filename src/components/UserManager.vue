@@ -133,23 +133,23 @@
             },
             //删除用户
             del(name){
-                this.$http.post(USER_DELETE, {username: name}).then((respones)=> {
+                this.$http.post(USER_DELETE, {username: name}).then((response)=> {
                     this.GetAllUser(this.cur, 10)
-                    JSON.stringify(response.body.code) == 0 ? alert(JSON.stringify(response.body.error)) : alert('success!');
+                    response.body.code == 0 ? alert(response.body.error): alert('success!');
                 })
             },
             editFn(){
                 this.$set('edit', !this.edit);
             },
             update(key){
-                this.$http.post(USER_INSERT, this.all_user[key]).then((respones)=> {
-                    JSON.stringify(response.body.code) == 0 ? alert(JSON.stringify(response.body.error)) : alert('success!');
+                this.$http.post(USER_INSERT, this.all_user[key]).then((response)=> {
+                    response.body.code == 0 ? alert(response.body.error): alert('success!');
                     this.GetAllUser(this.cur, 10)
                 });
             },
             add(){
-                this.$http.post(USER_INSERT, this.new_user).then((respones)=> {
-                    JSON.stringify(response.body.code) == 0 ? alert(JSON.stringify(response.body.error)) : alert('success!');
+                this.$http.post(USER_INSERT, this.new_user).then((response)=> {
+                   response.body.code == 0 ? alert(response.body.error): alert('success!');
                     this.GetAllUser(this.cur, 10)
                     this.$set('new_user',{
                         username: "",

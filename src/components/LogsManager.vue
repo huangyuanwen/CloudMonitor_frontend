@@ -145,7 +145,7 @@
                 let d = new Date(this.state.date)
                 let date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
                 this.$http.post(DELETE_LOGS_DAY_PATH, {day: date}).then((response)=> {
-                    JSON.stringify(response.body.code) == 0 ? alert(JSON.stringify(response.body.error)) : alert('success!');
+                    response.body.code == 0 ? alert(response.body.error): alert('success!');
                     _self.GetGroup();
                 })
 
@@ -153,7 +153,7 @@
             del_group(){
                 let _self = this;
                 this.$http.post(DELETE_LOGS_GROUP_PATH, {jobGroup: this.group}).then((response)=> {
-                    JSON.stringify(response.body.code) == 0 ? alert(JSON.stringify(response.body.error)) : alert('success!');
+                    response.body.code == 0 ? alert(response.body.error): alert('success!');
                     _self.GetGroup();
                 })
 
@@ -161,7 +161,7 @@
             del_all(){
                 let _self = this;
                 this.$http.post(DELETE_LOGS_ALL_PATH).then((response)=> {
-                    JSON.stringify(response.body.code) == 0 ? alert(JSON.stringify(response.body.error)) : alert('success!');
+                    response.body.code == 0 ? alert(response.body.error): alert('success!');
                     _self.GetGroup();
                 })
             }

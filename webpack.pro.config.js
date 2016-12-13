@@ -1,83 +1,57 @@
-"use strict";
-let webpack = require('webpack');
-let path = require('path');
-let HtmlWebpackPlugin = require('html-webpack-plugin');
-let ExtractTextPlugin = require("extract-text-webpack-plugin");
+var path = require('path');
+var webpack = require('webpack');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var CleanPlugin = require('clean-webpack-plugin'); //清理文件夹
+// 引入css 单独打包插件
+// require('./src/css/app.css');
+// require('./src/css/bootstrap.min.css');
 
-const vendors = ['react', 'react-dom']
 module.exports = {
-    devServer: {
-        hot: true,
-        contentBase: "./build",
-        proxy: {
-            '/sms-web/*': {
-                target: 'http://172.17.122.124:9099',
-                changeOrigin: true,
-                secure: false
-            }
-        }
-    },
-    devtool: "source-map", //生成sourcemap,便于开发调试
-    entry: {
-        app: "./src/main.js",
-        vendors: vendors //第三方库
-    }, //入口文件
+    entry: __dirname + '/src/main.js',
     output: {
-        path: path.join(__dirname, "build"),
-        publicPath: "./",
-        filename: "[name].[hash].bundle.js",
-        chunkFilename: "[id].[hash].bundle.js"
-    },
-    resolve: {
-        extensions: ["", ".js", ".jsx", ".tsx", ".ts"] //resolve.extensions 用于指明程序自动补全识别哪些后缀,
+        path: path.resolve(__dirname, './dist'),
+        publicPath: '/dist/',// html中嵌入的script的src的路径
+        filename: '[name].[hash].build.js'
     },
     module: {
-        //各种加载器，即让各种文件格式可用require引用
-        loaders: [{
-                test: /\.js|jsx$/,
-                loader: ["babel"],
-                exclude: "/node_modules/",
-                query: {
-                    presets: ['es2015', 'react']
-                }
+        loaders: [
+            {
+                test: /\.vue$/,
+                loader: 'vue'
+            },
+            {
+                test: /\.js$/,
+                loader: 'babel',
+                exclude: /node_modules/
             },
             {
                 test: /\.css$/,
-                exclude: "/node_modules/",
-                loader: ExtractTextPlugin.extract("css-loader")
+                loader: 'style-loader!css-loader'
             },
             {
-                test: /\.scss$/,
-                loader: ExtractTextPlugin.extract("css!sass")
+                test: /\.json$/,
+                loader: 'json'
             },
             {
-                test: /\.(png|jpg|woff|woff2|eot|ttf|svg)/,
-                loader: 'url-loader?limit=8192'
+                test: /\.html$/,
+                loader: 'vue-html'
+            },
+            {
+                test: /\.(png|jpg|gif|svg)$/,
+                loader: 'url',
+                query: {
+                    limit: 10000,
+                    name: '[name].[ext]?[hash]'
+                }
             }
         ]
     },
     plugins: [
-        new webpack.optimize.UglifyJsPlugin({
-            compressor: {
-                screw_ie8: true,
-                warnings: false
-            },
-            mangle: {
-                screw_ie8: true
-            },
-            output: {
-                comments: false,
-                screw_ie8: true
-            },
-            except: ['$super', '$', 'exports', 'require'] //排除关键字
-        }),
-        // new ExtractTextPlugin("styles.css"),
-        new ExtractTextPlugin("[name].[hash].css"),
-        new webpack.optimize.CommonsChunkPlugin( /* chunkName= */ "vendors", /* filename= */ "vendors.[hash].bundle.js", Infinity),
+        //清空输出目录
+        new CleanPlugin(['dist']),
         new HtmlWebpackPlugin({
             inject: true,
-            template: 'src/index.html',
-            chunks: ['app', 'vendors'],
+            template: 'index.html',
             minify: {
                 removeComments: true,
                 collapseWhitespace: true,
@@ -90,13 +64,36 @@ module.exports = {
                 minifyCSS: true,
                 minifyURLs: true
             }
-        }),
-        // new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"production"' }),
-        new webpack.DefinePlugin({
-            "process.env": {
-                NODE_ENV: JSON.stringify("production")
-            }
         })
-        // new WebpackBrowserPlugin(),
-    ]
-};
+    ],
+    devServer: {
+        historyApiFallback: true,
+        noInfo: true,
+        proxy: {
+            '/CloudMonitor': {
+                target: 'http://10.7.73.86:8080',
+                changeOrigin: true,
+                secure: false
+            }
+        }
+    },
+    devtool: '#eval-source-map'
+}
+
+if (process.env.NODE_ENV === 'production') {
+    module.exports.devtool = '#source-map'
+    // http://vue-loader.vuejs.org/en/workflow/production.html
+    module.exports.plugins = (module.exports.plugins || []).concat([
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: '"production"'
+            }
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false
+            }
+        }),
+        new webpack.optimize.OccurenceOrderPlugin()
+    ])
+}

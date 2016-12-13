@@ -93,7 +93,7 @@
         data(){
             return {
                 state: state,
-                cur: "",
+                cur: 1,
                 totalPage:"",
                 table: [],
                 format: 'yyyy-MM-dd',
@@ -125,7 +125,7 @@
                             _self.$set('selected', response.data.data[0]);
                             _self.$set('options', response.data.data);
                             //进入页面后第一次获取数据
-                            this.GetData(1, 10, this.selected);
+//                            this.GetData(1, 10, this.selected);
                         })
             },
             GetData(pageNo, pageSize, group){

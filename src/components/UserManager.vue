@@ -45,7 +45,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="(key,user) in all_user">
+                        <tr  v-for="(key,user) in all_user">
                             <td>
                                 <span v-show="edit">{{user.username}}</span>
                                 <span v-show="!edit"><input type="text" v-model="user.username"></span>
@@ -96,7 +96,7 @@
         components: {vNav},
         data(){
             return {
-                cur: '',
+                cur: 1,
                 totalPage: '',
                 all_user: [],
                 new_user: {

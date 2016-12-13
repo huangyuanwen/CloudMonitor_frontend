@@ -61,8 +61,8 @@
             </div>
         </div>
         <div class="panel panel-default">
-            <div class="panel-heading">
-                <v-select :value.sync="selected" :options="options"></v-select>
+            <div class="panel-heading text-right">
+                <v-select :value.sync="selected" :options="options" style="width: 300px;display: inline-block"></v-select>
             </div>
             <div class="wrapper row">
                 <div class="table-responsive">
@@ -138,7 +138,7 @@
         components: {vSelect,vNav},
         data(){
             return {
-                cur: "",
+                cur: 1,
                 totalPage:"",
                 editr: false,
                 selected: '',
@@ -192,8 +192,6 @@
                             let _self = this;
                             _self.$set('selected', response.data.data[0]);
                             _self.$set('options', response.data.data);
-                            //进入页面后第一次获取数据
-                            this.GetData(1, 10, this.selected);
                         })
             },
             GetData(pageNo, pageSize, group){

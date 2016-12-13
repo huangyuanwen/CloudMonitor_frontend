@@ -84,7 +84,7 @@
     import {GET_COOKIE} from '../js/cookie'
     import vSelect from 'vue-select'
     import Datepicker from 'vuejs-datepicker'
-    import vNav from './vue-nav.vue'
+    import vNav from './vue-pagination.vue'
     let state = {
         date: new Date()
     };

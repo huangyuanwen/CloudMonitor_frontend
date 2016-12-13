@@ -80,7 +80,7 @@
             FIND_ALL_USER_PATH,
             DELETD_USER_GROUP
     } from '../common-path';
-    import vNav from './vue-nav.vue'
+    import vNav from './vue-pagination.vue'
     import vSelect from 'vue-select'
     export default{
         components: {vNav, vSelect},

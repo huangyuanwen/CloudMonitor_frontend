@@ -91,7 +91,7 @@
     } from '../common-path';
     import {GET_COOKIE} from '../js/cookie'
     import vSelect from 'vue-select'
-    import vNav from './vue-nav.vue'
+    import vNav from './vue-pagination.vue'
     export default{
         components: {vNav},
         data(){

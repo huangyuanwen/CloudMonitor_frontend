@@ -6,7 +6,7 @@
             </div>-->
             <div class="row wrapper">
                 <div class="col-sm-3 m-b-xs dropdown open">
-                    <button style="width: 200px;min-height: 34px" type="button" class="btn btn-default dropdown-toggle"
+                    <button style="min-width: 200px; width:auto; min-height: 34px" type="button" class="btn btn-default dropdown-toggle"
                             @click="opendropdown()">
                         {{selected}}<span class="caret pull-right" style="margin-top: .5em"></span>
                     </button>

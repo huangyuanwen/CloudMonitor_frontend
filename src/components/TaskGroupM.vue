@@ -10,7 +10,7 @@
                             @click="opendropdown()">
                         {{selected}}<span class="caret pull-right" style="margin-top: .5em"></span>
                     </button>
-                    <ul class="dropdown-menu" v-show="open" role="menu">
+                    <ul class="dropdown-menu" style="width: 480px" v-show="open" role="menu">
                         <li v-for="(key,group) in all_group" v-on:click.stop="select(group.job_group)">
                             <a>
                                 <span v-show="edit">{{group.job_group}}</span>

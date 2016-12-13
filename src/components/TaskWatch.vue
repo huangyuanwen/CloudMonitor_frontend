@@ -67,7 +67,7 @@
         </div>
         <div class="panel panel-default">
             <div class="panel-heading text-right">
-                <v-select :value.sync="selected" :options="options" style="width: 300px;display: inline-block"></v-select>
+                <v-select :value.sync="selected" :options="options" style="width: 460px;display: inline-block"></v-select>
             </div>
             <div class="wrapper row">
                 <div class="table-responsive">

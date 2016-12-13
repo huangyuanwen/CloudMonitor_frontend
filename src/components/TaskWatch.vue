@@ -24,7 +24,10 @@
                         </tr>
                         <tr>
                             <td>请求JSON</td>
-                            <td><input type="text" class="form-control" v-model="edit_data.json"></td>
+                            <td>
+                                <!--<input type="text" class="form-control" v-model="edit_data.json">-->
+                                <v-select :value.sync="edit_data.json" :options="['GET','POST','DELETE','PUT']"></v-select>
+                            </td>
                             <td>邮件接收人</td>
                             <td>
                                 <!--<input type="text" class="form-control" v-model="edit_data.mailto">-->

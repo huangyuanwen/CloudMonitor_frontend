@@ -95,7 +95,7 @@
                                 <span>{{data.job_group}}</span>
                             </td>
                             <td>
-                                <span>{{data.regex}}</span>
+                                <span>{{data.cron_expression}}</span>
                             </td>
                             <td>
                                 <span>{{data.url}}</span>

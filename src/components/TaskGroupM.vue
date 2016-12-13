@@ -8,7 +8,7 @@
                 <div class="col-sm-3 m-b-xs dropdown open">
                     <button style="width: 200px;min-height: 34px" type="button" class="btn btn-default dropdown-toggle"
                             @click="opendropdown()">
-                        {{selected}}<span class="caret pull-right"></span>
+                        {{selected}}<span class="caret pull-right" style="margin-top: .5em"></span>
                     </button>
                     <ul class="dropdown-menu" v-show="open" role="menu">
                         <li v-for="(key,group) in all_group" v-on:click.stop="select(group.job_group)">

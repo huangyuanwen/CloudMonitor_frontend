@@ -12,7 +12,7 @@
                     <li v-link="{ path: '/home/task-watch',activeClass: 'active' }"><a>监控任务</a></li>
                     <li v-link="{ path: '/home/logs-manager',activeClass: 'active' }"><a>日志管理</a></li>
                     <li v-link="{ path: '/home/user-manager',activeClass:'active'}" v-show="isRoot==0"><a>用户管理</a></li>
-                    <li v-link="{ path: '/home/task-grorp-m',activeClass:'active'}" v-show="isRoot==0"><a>任务组管理</a></li>
+                    <li v-link="{ path: '/home/task-grorp-m',activeClass:'active'}"><a>任务组管理</a></li>
                     <li v-link="{ path: '/home/edit-user-info',activeClass:'active'}" v-show="isRoot==1"><a>个人信息修改</a>
                     </li>
                 </ul>

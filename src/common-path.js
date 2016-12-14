@@ -7,8 +7,8 @@
  * prod .
  * @type {string}
  */
-// const PORXY_URL = "./CloudMonitor";
-const PORXY_URL = ".";
+const PORXY_URL = "./CloudMonitor";
+// const PORXY_URL = ".";
 /**
  * 登陆接口配置
  * @type {string}
@@ -73,3 +73,5 @@ export const FIND_USER_BY_GROUP = PORXY_URL+"/group/getUsersByGroup";
 export const ADD_USER_INSER_GROUP = PORXY_URL+"/group/addUserToGroup";
 //删除指定任务组下的用户
 export const DELETD_USER_GROUP = PORXY_URL+"/group/deleteUserFromGroup";
+//新增联系人
+ export const ADD_CONTACT_USER = PORXY_URL+"/group/addUserInfoToGroup"

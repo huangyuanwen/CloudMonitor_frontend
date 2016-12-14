@@ -1,36 +1,38 @@
 <template>
     <div class="wrapper-md">
         <div class="panel panel-default">
-            <div class="panel-heading">
-                删除日志
-                <!-- <div class="text-right">
-                     <v-select :value.sync="selected" :options="options"></v-select>
-                 </div>-->
-            </div>
-            <div class="row wrapper">
-                <table class="table">
-                    <tr>
-                        <td>按监控任务执行日期删除日志记录:</td>
-                        <td>执行日期</td>
-                        <td>
-                            <datepicker :value="state.date" :format="format" class="form-control"></datepicker>
-                        </td>
-                        <td>
-                            <a @click="del_day()">按天删除</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>按任务组删除所属全部监控任务日志:</td>
-                        <td>任务组</td>
-                        <td>
-                            <v-select :value.sync="group" multiple :options="options"></v-select>
-                        </td>
-                        <td><a @click="del_group()">按组删除</a></td>
-                    </tr>
-                    <tr>
-                        <td><a @click="del_all()">删除全部日志</a></td>
-                    </tr>
-                </table>
+            <div v-if="user_info.role=='root'">
+                <div class="panel-heading">
+                    删除日志
+                    <!-- <div class="text-right">
+                         <v-select :value.sync="selected" :options="options"></v-select>
+                     </div>-->
+                </div>
+                <div class="row wrapper">
+                    <table class="table">
+                        <tr>
+                            <td>按监控任务执行日期删除日志记录:</td>
+                            <td>执行日期</td>
+                            <td>
+                                <datepicker :value="state.date" :format="format" class="form-control"></datepicker>
+                            </td>
+                            <td>
+                                <a class="btn btn-default" @click="del_day()">按天删除</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>按任务组删除所属全部监控任务日志:</td>
+                            <td>任务组</td>
+                            <td>
+                                <v-select :value.sync="group" multiple :options="options"></v-select>
+                            </td>
+                            <td><a class="btn-default btn" @click="del_group()">按组删除</a></td>
+                        </tr>
+                        <tr>
+                            <!--<td><a @click="del_all()">删除全部日志</a></td>-->
+                        </tr>
+                    </table>
+                </div>
             </div>
 
             <div class="panel-heading">
@@ -45,7 +47,7 @@
                     </select>
                 </div>
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-hover">
                         <thead>
                         <tr>
                             <th>任务ID</th>
@@ -92,6 +94,7 @@
     export default{
         data(){
             return {
+                user_info:JSON.parse(GET_COOKIE('user')),
                 state: state,
                 cur: 1,
                 totalPage:"",

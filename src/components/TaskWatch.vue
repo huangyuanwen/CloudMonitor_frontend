@@ -170,7 +170,7 @@
             }
         },
         ready () {
-            this.GetUser();
+//            this.GetUser();
             this.GetGroup();
         },
         watch: {
@@ -179,14 +179,18 @@
             },
             cur(val){
                 this.GetData(val, 10, this.selected);
-            }
+            },
+            "edit_data.job_group"(val){
+                this.GetUser(val);
+            },
+
         },
         methods: {
             listen(val){
                 GetData(val,10,this.selected);
             },
-            GetUser(){
-                this.$http.post(FIND_ALL_USER_PATH)
+            GetUser(val){
+                this.$http.post(FIND_ALL_USER_PATH,{job_group:val})
                         .then(function (data) {
                             this.$set('userList', data.body.data);
                         })

@@ -34,7 +34,7 @@
             </div>
             <div class="row wrapper">
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-hover">
                         <thead>
                         <tr>
                             <th>用户名</th>

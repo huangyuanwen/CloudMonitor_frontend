@@ -28,12 +28,13 @@
 </template>
 
 <script>
-    import {GET_COOKIE,SET_COOKIE} from '../js/cookie';
+    import {GET_COOKIE,SET_COOKIE,DEL_COOKIE} from '../js/cookie';
     import {USER_INSERT} from '../common-path';
     export default{
         data(){
             return{
                 user:{
+                    id:JSON.parse(GET_COOKIE('user')).id,
                     username:JSON.parse(GET_COOKIE('user')).username,
                     phone:JSON.parse(GET_COOKIE('user')).phone,
                     email:JSON.parse(GET_COOKIE('user')).email,
@@ -43,15 +44,18 @@
         },
         methods:{
             update(){
-                this.$http.post(USER_INSERT,{
-                    username:this.user.username,
-                    phone:this.user.phone,
-                    email:this.user.email,
-                    password:this.user.password,
-                }).then((response)=>{
-                    SET_COOKIE(JSON.stringify(this.user));
-                    alert('已修改')
-                })
+                if(confirm('用户信息修改后需重新登陆！是否确认？')){
+                    this.$http.post(USER_INSERT,{
+                        id:this.user.id,
+                        username:this.user.username,
+                        phone:this.user.phone,
+                        email:this.user.email,
+                        password:this.user.password,
+                    }).then((response)=>{
+                        DEL_COOKIE('user');
+                        this.$router.go('/')
+                    })
+                }
             }
         }
     }

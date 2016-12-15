@@ -45,10 +45,10 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr  v-for="(key,user) in all_user">
+                        <tr class="tr_{{key}}"  v-for="(key,user) in all_user">
                             <td>
                                 <span v-show="edit">{{user.username}}</span>
-                                <span v-show="!edit"><input type="text" v-model="user.username"></span>
+                                <span v-show="!edit"><input class="form-control" type="text" v-model="user.username"></span>
                             </td>
                           <!--  <td>
                                 <span v-show="edit" class="lang">{{user.password}}</span>
@@ -56,11 +56,11 @@
                             </td>-->
                             <td>
                                 <span v-show="edit">{{user.phone}}</span>
-                                <span v-show="!edit"><input type="text" v-model="user.phone"></span>
+                                <span v-show="!edit"><input class="form-control" type="text" v-model="user.phone"></span>
                             </td>
                             <td>
                                 <span v-show="edit">{{user.email}}</span>
-                                <span v-show="!edit"><input type="text" v-model="user.email"></span>
+                                <span v-show="!edit"><input class="form-control" type="text" v-model="user.email"></span>
                             </td>
                             <td>
                                 <span><a @click="del(user.username)">删除</a></span>

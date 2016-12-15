@@ -9,7 +9,7 @@
                      </div>-->
                 </div>
                 <div class="row wrapper">
-                    <table class="table">
+                    <table class="table no_nomarl">
                         <tr>
                             <td>按监控任务执行日期删除日志记录:</td>
                             <td>执行日期</td>
@@ -186,5 +186,9 @@
         width: 100%;
         height: 100%;
         border: none;
+    }
+    .no_nomarl tr td{
+        white-space: inherit;
+        text-overflow: inherit;
     }
 </style>

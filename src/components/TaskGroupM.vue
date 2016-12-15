@@ -12,13 +12,19 @@
                         {{selected}}<span class="caret pull-right" style="margin-top: .5em"></span>
                     </button>
                     <ul class="dropdown-menu" style="width: 480px" v-show="open" role="menu">
-                        <li v-for="(key,group) in all_group" v-on:click.stop="select(group)">
+                        <li v-for="(key,group) in all_group" v-on:click.stop="select(group.job_group)">
                             <a>
-                                <span v-show="edit">{{group}}</span>
-                                <span v-show="!edit"><input type="text" v-model="group.job_group"></span>
-                                <button class="pull-right" v-show="edit" v-on:click.stop="editFunc()">编辑</button>
-                                <button class="pull-right" v-show="!edit" v-on:click.stop="update(key)">保存</button>
-                                <button class="pull-right" v-on:click.stop="del_group(group)">删除</button>
+                                <div class="input-group">
+                                    <span v-show="edit">{{group.job_group}}</span>
+                                    <input v-show="!edit" type="text" class="input-sm form-control" v-model="group.job_group">
+                                    <span class="input-group-btn">
+                                         <button class="btn btn-sm btn-default" v-show="edit"
+                                                 v-on:click.stop="editFunc()">编辑</button>
+                                <button class="btn btn-sm btn-default" v-show="!edit"
+                                        v-on:click.stop="update(key)">保存</button>
+                                <button class="btn btn-sm btn-default" v-on:click.stop="del_group(group.job_group)">删除</button>
+          </span>
+                                </div>
                             </a>
                         </li>
                     </ul>
@@ -98,7 +104,8 @@
             FIND_ALL_USER_PATH,
             DELETD_USER_GROUP,
             GET_GROUP_BY_USER,
-            ADD_CONTACT_USER
+            ADD_CONTACT_USER,
+            GET_ALL_GROUPS__BY_USER
     } from '../common-path';
     import vNav from './vue-pagination.vue'
     import vSelect from 'vue-select'
@@ -156,10 +163,10 @@
             },
             GetAllGroup(){
                 let _self = this;
-                _self.$http.post(GET_GROUP_BY_USER, {username: JSON.parse(GET_COOKIE('user')).username}).then((response)=> {
-                    _self.$set('selected', response.data.data[0] ? response.data.data[0] : "");
+                _self.$http.post(GET_ALL_GROUPS__BY_USER, {username: JSON.parse(GET_COOKIE('user')).username,role:JSON.parse(GET_COOKIE('user')).role}).then((response)=> {
+                    _self.$set('selected', response.data.data[0] ? response.data.data[0].job_group : "");
                     _self.$set('all_group', response.data.data);
-                    this.find_all_user()
+//                    this.find_all_user()
                     //  this.find_user_by_group(1, 10, _self.selected);
                 })
             },
@@ -168,7 +175,7 @@
             },
             update(key){
                 let _self = this;
-                _self.$http.post(GROUP_UPDATE, this.all_group[key]).then((response)=> {
+                _self.$http.post(GROUP_UPDATE,  this.all_group[key]).then((response)=> {
                     _self.GetAllGroup();
                     response.body.code == 0 ? alert(response.body.error) : alert('success!');
                     this.$set('edit', true);
@@ -208,8 +215,10 @@
                 })
             },
             find_all_user(){
-                console.log(this.selected)
-                this.$http.post(FIND_ALL_USER_PATH,{job_group:this.selected}).then((response)=> {
+                this.$http.post(FIND_ALL_USER_PATH, {
+                    job_group: this.selected,
+                    role: JSON.parse(GET_COOKIE('user')).role
+                }).then((response)=> {
                     this.$set('userList', response.body.data);
                 })
             },
@@ -231,8 +240,13 @@
                     email: this.contact.email,
                     phone: this.contact.phone,
                 }).then((response)=> {
-                    response.body.code == 0 ? alert(response.body.error): alert('success!');
+                    response.body.code == 0 ? alert(response.body.error) : alert('success!');
                     this.find_user_by_group(1, 10, this.selected)
+                    this.$set('contact', {
+                        username: "",
+                        phone: "",
+                        email: ""
+                    });
                 })
             },
 

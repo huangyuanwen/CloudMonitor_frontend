@@ -74,7 +74,7 @@
                     </table>
                     <footer class="panel-footer">
                         <!-- 页码栏 -->
-                        <v-nav :cur.sync="cur" :all.sync="totalPage" v-on:btn-click="listen" class="text-center"></v-nav>
+                        <v-nav :cur.sync="cur" :all.sync="totalPage" class="text-center"></v-nav>
                     </footer>
                 </div>
             </div>
@@ -120,9 +120,9 @@
         },
         methods: {
             //监听页码变化
-            listen(data) {
+           /* listen(data) {
                 this.GetAllUser(data, 10);
-            },
+            },*/
             //获取所有用户
             GetAllUser(pageNum, pageSize){
                 this.$http.post(FIND_USER_LIST, {pageNum: pageNum, pageSzie: pageSize}).then((respones)=> {

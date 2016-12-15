@@ -39,12 +39,8 @@
                 日志列表
             </div>
             <div class="row wrapper">
-                <div class="text-right">
-                    <!--<v-select :value.sync="selected" :options="options"></v-select>-->
-                    <select class="form-control" v-model="selected"
-                            style="width: 200px;display: inline-block;margin-right: 15px">
-                        <option v-for="option in options" value="{{option}}">{{option}}</option>
-                    </select>
+                <div class="text-right padder">
+                    <v-select :value.sync="selected" :options="options"  style="width: 460px;display: inline-block;"></v-select>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover">
@@ -68,7 +64,7 @@
                         </tbody>
                     </table>
                     <!-- 页码栏 -->
-                    <v-nav :cur.sync="cur" :all.sync="totalPage" v-on:btn-click="listen" class="text-center"></v-nav>
+                    <v-nav :cur.sync="cur" :all.sync="totalPage"  class="text-center"></v-nav>
                 </div>
             </div>
         </div>
@@ -118,9 +114,9 @@
             }
         },
         methods: {
-            listen(val){
+           /* listen(val){
                 this.GetData(val, 10, this.selected)
-            },
+            },*/
             GetGroup(){
                 this.$http.post(GET_GROUP_BY_USER, {"username": JSON.parse(GET_COOKIE('user')).username})
                         .then((response)=> {

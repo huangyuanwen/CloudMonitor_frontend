@@ -11,7 +11,7 @@
                             @click="opendropdown()">
                         {{selected}}<span class="caret pull-right" style="margin-top: .5em"></span>
                     </button>
-                    <ul class="dropdown-menu" style="width: 480px" v-show="open" role="menu">
+                    <ul class="dropdown-menu" v-show="open" role="menu">
                         <li v-for="(key,group) in all_group" v-on:click.stop="select(group.job_group)">
                             <a>
                                 <div class="input-group">
@@ -88,7 +88,7 @@
                 </table>
             </div>
             <footer class="panel-footer">
-                <v-nav :cur.sync="cur" :all.sync="totalPage" v-on:btn-click="listen" class="text-center"></v-nav>
+                <v-nav :cur.sync="cur" :all.sync="totalPage"  class="text-center"></v-nav>
             </footer>
         </div>
     </div>
@@ -146,9 +146,9 @@
             }
         },
         methods: {
-            listen(val){
+          /*  listen(val){
                 this.find_user_by_group(val, 10, this.selected)
-            },
+            },*/
             addGroup(){
                 this.$http.post(ADD_NEW_GROUP, {
                     jobGroup: this.groupName,
@@ -225,7 +225,8 @@
             addUser(){
                 this.$http.post(ADD_USER_INSER_GROUP, {
                     "username": this.selected_user,
-                    "job_group": this.selected
+                    "job_group": this.selected,
+                    "role":JSON.parse(GET_COOKIE('user')).role
                 }).then((response)=> {
                     response.body.code == 0 ? alert(response.body.error) : alert('success!');
                     this.find_user_by_group(1, 10, this.selected);

@@ -89,7 +89,7 @@
                                 <span>{{data.job_id}}</span>
                             </td>
                             <td>
-                                <span>{{data.job_description}}</span>
+                                <span class="long">{{data.job_description}}</span>
                             </td>
                             <td>
                                 <span>{{data.job_group}}</span>
@@ -98,7 +98,7 @@
                                 <span>{{data.cron_expression}}</span>
                             </td>
                             <td>
-                                <span>{{data.url}}</span>
+                                <span class="long">{{data.url}}</span>
                             </td>
                             <td>
                                 <span>{{data.method}}</span>
@@ -120,7 +120,7 @@
                         </tbody>
                     </table>
                     <!-- 页码栏 -->
-                    <v-nav :cur.sync="cur" :all.sync="totalPage" v-on:btn-click="listen" class="text-center"></v-nav>
+                    <v-nav :cur.sync="cur" :all.sync="totalPage"  class="text-center"></v-nav>
                 </div>
             </div>
         </div>
@@ -186,9 +186,9 @@
 
         },
         methods: {
-            listen(val){
+          /*  listen(val){
                 GetData(val,10,this.selected);
-            },
+            },*/
             GetUser(val){
                 this.$http.post(FIND_ALL_USER_PATH,{job_group:val})
                         .then(function (data) {
@@ -284,3 +284,12 @@
         }
     }
 </script>
+<style>
+    td > .long {
+        max-width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+    }
+</style>

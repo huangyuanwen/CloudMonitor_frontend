@@ -7,8 +7,9 @@
  * prod .
  * @type {string}
  */
-// const PORXY_URL = "./CloudMonitor";
-const PORXY_URL = ".";
+import config from '../conf/config'
+
+let PORXY_URL = config.porxy.base;
 /**
  * 登陆接口配置
  * @type {string}

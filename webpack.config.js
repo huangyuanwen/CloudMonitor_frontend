@@ -2,6 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CleanPlugin = require('clean-webpack-plugin'); //清理文件夹
+const config = require('./conf/config')
 // 引入css 单独打包插件
 // require('./src/css/app.css');
 // require('./src/css/bootstrap.min.css');
@@ -79,7 +80,7 @@ module.exports = {
         noInfo: true,
         proxy: {
             '/CloudMonitor': {
-                target: 'http://10.7.73.86:8080',
+                target: config.porxy.target,
                 changeOrigin: true,
                 secure: false
             }

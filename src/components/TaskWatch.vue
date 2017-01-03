@@ -105,8 +105,8 @@
                             </td>
                             <td>
               <span>
-                  <a v-show="!editr" @click="edit(key)">编辑</a>
-                  <a v-show="editr" @click="save(key)">保存</a>
+                  <a v-show="index!=$index" @click="edit(key,$index)">编辑</a>
+                  <a v-show="index==$index" @click="save(key)">保存</a>
               </span>
                                 <span>
                     <a @click="start(data.job_id)" v-show="data.job_status==0">启动</a>
@@ -143,6 +143,7 @@
         components: {vSelect,vNav},
         data(){
             return {
+                index:"undefind",
                 cur: 1,
                 totalPage:"",
                 editr: false,
@@ -224,9 +225,9 @@
                             this.GetData(1, 10, this.selected);
                         })
             },
-            edit(key){
+            edit(key,index){
                 this.$set('edit_data', this.table[key]);
-                this.$set('editr', true);
+                this.$set('index', index);
             },
             save(key){
 //                let key = key || "";
@@ -234,7 +235,7 @@
                         .then((response)=> {
                             this.$set('edit_data', {});
                             this.GetData(this.cur, 10, this.selected);
-                            this.$set('editr', false);
+                            this.$set('index', 'undefind');
                             response.body.code == 0 ? alert(response.body.error): alert('success!');
                             this.$set('edit_data', {
                                 cron_expression: "",

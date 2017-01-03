@@ -45,29 +45,32 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="tr_{{key}}"  v-for="(key,user) in all_user">
+                        <tr class="tr_{{key}}" v-for="(key,user) in all_user">
                             <td>
-                                <span v-show="edit">{{user.username}}</span>
-                                <span v-show="!edit"><input class="form-control" type="text" v-model="user.username"></span>
+                                <div>
+                                    <span v-show="index!=$index">{{user.username}}</span>
+                                    <span v-show="index==$index"><input class="form-control" type="text"
+                                                                        v-model="user.username"></span>
+                                </div>
                             </td>
-                          <!--  <td>
-                                <span v-show="edit" class="lang">{{user.password}}</span>
-                                <span v-show="!edit"><input type="text" v-model="user.password"></span>
-                            </td>-->
+                            <!--  <td>
+                                  <span v-show="edit" class="lang">{{user.password}}</span>
+                                  <span v-show="!edit"><input type="text" v-model="user.password"></span>
+                              </td>-->
                             <td>
-                                <span v-show="edit">{{user.phone}}</span>
-                                <span v-show="!edit"><input class="form-control" type="text" v-model="user.phone"></span>
+                                <span v-show="index!=$index">{{user.phone}}</span>
+                                <span v-show="index==$index"><input class="form-control" type="text"
+                                                                    v-model="user.phone"></span>
                             </td>
                             <td>
-                                <span v-show="edit">{{user.email}}</span>
-                                <span v-show="!edit"><input class="form-control" type="text" v-model="user.email"></span>
+                                <span v-show="index!=$index">{{user.email}}</span>
+                                <span v-show="index==$index"><input class="form-control" type="text"
+                                                                    v-model="user.email"></span>
                             </td>
                             <td>
+                                <a @click="editFn($index)" v-show="index!=$index">编辑</a>
+                                <a @click="update(key)" v-show="index==$index">保存</a>
                                 <span><a @click="del(user.username)">删除</a></span>
-                                <span @click="editFn()">
-                        <a v-show="edit">编辑</a>
-                    <a @click="update(key)" v-show="!edit">保存</a>
-                    </span>
                             </td>
                         </tr>
                         </tbody>
@@ -96,6 +99,7 @@
         components: {vNav},
         data(){
             return {
+                index: 'undefind',
                 cur: 1,
                 totalPage: '',
                 all_user: [],
@@ -105,7 +109,6 @@
                     email: "",
                     phone: ""
                 },
-                edit: true,
             }
         },
         watch: {
@@ -120,9 +123,9 @@
         },
         methods: {
             //监听页码变化
-           /* listen(data) {
-                this.GetAllUser(data, 10);
-            },*/
+            /* listen(data) {
+             this.GetAllUser(data, 10);
+             },*/
             //获取所有用户
             GetAllUser(pageNum, pageSize){
                 this.$http.post(FIND_USER_LIST, {pageNum: pageNum, pageSzie: pageSize}).then((respones)=> {
@@ -135,23 +138,25 @@
             del(name){
                 this.$http.post(USER_DELETE, {username: name}).then((response)=> {
                     this.GetAllUser(this.cur, 10)
-                    response.body.code == 0 ? alert(response.body.error): alert('success!');
+                    response.body.code == 0 ? alert(response.body.error) : alert('success!');
                 })
             },
-            editFn(){
-                this.$set('edit', !this.edit);
+            editFn(index){
+//                this.$set('edit', !this.edit);
+                this.$set('index', index)
             },
             update(key){
+                this.$set('index','undefind')
                 this.$http.post(USER_INSERT, this.all_user[key]).then((response)=> {
-                    response.body.code == 0 ? alert(response.body.error): alert('success!');
+                    response.body.code == 0 ? alert(response.body.error) : alert('success!');
                     this.GetAllUser(this.cur, 10)
                 });
             },
             add(){
                 this.$http.post(USER_INSERT, this.new_user).then((response)=> {
-                   response.body.code == 0 ? alert(response.body.error): alert('success!');
+                    response.body.code == 0 ? alert(response.body.error) : alert('success!');
                     this.GetAllUser(this.cur, 10)
-                    this.$set('new_user',{
+                    this.$set('new_user', {
                         username: "",
                         password: "",
                         email: "",

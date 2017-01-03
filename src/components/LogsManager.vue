@@ -14,7 +14,7 @@
                             <td>按监控任务执行日期删除日志记录:</td>
                             <td>执行日期</td>
                             <td>
-                                <datepicker :value="state.date" :format="format" class="form-control"></datepicker>
+                                <datepicker :value.sync="state.date" :format="format" class="form-control"></datepicker>
                             </td>
                             <td>
                                 <a class="btn btn-default" @click="del_day()">按天删除</a>
@@ -143,7 +143,7 @@
                 let _self = this;
                 let d = new Date(this.state.date)
                 let date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-                this.$http.post(DELETE_LOGS_DAY_PATH, {day: date}).then((response)=> {
+                this.$http.post(DELETE_LOGS_DAY_PATH, {day: $('.datepicker>input').val()}).then((response)=> {
                     response.body.code == 0 ? alert(response.body.error): alert('success!');
                     _self.GetGroup();
                 })

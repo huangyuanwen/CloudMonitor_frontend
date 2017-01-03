@@ -16,13 +16,15 @@
                             <a>
                                 <div class="input-group">
                                     <span v-show="edit">{{group.job_group}}</span>
-                                    <input v-show="!edit" type="text" class="input-sm form-control" v-model="group.job_group">
+                                    <input v-show="!edit" type="text" class="input-sm form-control"
+                                           v-model="group.job_group">
                                     <span class="input-group-btn">
                                          <button class="btn btn-sm btn-default" v-show="edit"
                                                  v-on:click.stop="editFunc()">编辑</button>
                                 <button class="btn btn-sm btn-default" v-show="!edit"
                                         v-on:click.stop="update(key)">保存</button>
-                                <button class="btn btn-sm btn-default" v-on:click.stop="del_group(group.job_group)">删除</button>
+                                <button class="btn btn-sm btn-default"
+                                        v-on:click.stop="del_group(group.job_group)">删除</button>
           </span>
                                 </div>
                             </a>
@@ -41,9 +43,9 @@
                 </div>
                 <div class="col-sm-3 col-sm-offset-2">
                     <div class="input-group">
-                        <input type="text" class="input-sm form-control" v-model="groupName">
+                        <input type="text" class=" form-control" v-model="groupName">
                         <span class="input-group-btn">
-            <button class="btn btn-sm btn-default" type="button" @click="addGroup()">新增任务组</button>
+            <button class="btn  btn-default" type="button" @click="addGroup()">新增任务组</button>
           </span>
                     </div>
                 </div>
@@ -88,7 +90,7 @@
                 </table>
             </div>
             <footer class="panel-footer">
-                <v-nav :cur.sync="cur" :all.sync="totalPage"  class="text-center"></v-nav>
+                <v-nav :cur.sync="cur" :all.sync="totalPage" class="text-center"></v-nav>
             </footer>
         </div>
     </div>
@@ -146,9 +148,9 @@
             }
         },
         methods: {
-          /*  listen(val){
-                this.find_user_by_group(val, 10, this.selected)
-            },*/
+            /*  listen(val){
+             this.find_user_by_group(val, 10, this.selected)
+             },*/
             addGroup(){
                 this.$http.post(ADD_NEW_GROUP, {
                     jobGroup: this.groupName,
@@ -163,7 +165,10 @@
             },
             GetAllGroup(){
                 let _self = this;
-                _self.$http.post(GET_ALL_GROUPS__BY_USER, {username: JSON.parse(GET_COOKIE('user')).username,role:JSON.parse(GET_COOKIE('user')).role}).then((response)=> {
+                _self.$http.post(GET_ALL_GROUPS__BY_USER, {
+                    username: JSON.parse(GET_COOKIE('user')).username,
+                    role: JSON.parse(GET_COOKIE('user')).role
+                }).then((response)=> {
                     _self.$set('selected', response.data.data[0] ? response.data.data[0].job_group : "");
                     _self.$set('all_group', response.data.data);
 //                    this.find_all_user()
@@ -175,7 +180,7 @@
             },
             update(key){
                 let _self = this;
-                _self.$http.post(GROUP_UPDATE,  this.all_group[key]).then((response)=> {
+                _self.$http.post(GROUP_UPDATE, this.all_group[key]).then((response)=> {
                     _self.GetAllGroup();
                     response.body.code == 0 ? alert(response.body.error) : alert('success!');
                     this.$set('edit', true);
@@ -226,7 +231,7 @@
                 this.$http.post(ADD_USER_INSER_GROUP, {
                     "username": this.selected_user,
                     "job_group": this.selected,
-                    "role":JSON.parse(GET_COOKIE('user')).role
+                    "role": JSON.parse(GET_COOKIE('user')).role
                 }).then((response)=> {
                     response.body.code == 0 ? alert(response.body.error) : alert('success!');
                     this.find_user_by_group(1, 10, this.selected);

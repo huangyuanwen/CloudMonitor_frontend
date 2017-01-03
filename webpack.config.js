@@ -3,9 +3,6 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CleanPlugin = require('clean-webpack-plugin'); //清理文件夹
 const config = require('./conf/config')
-// 引入css 单独打包插件
-// require('./src/css/app.css');
-// require('./src/css/bootstrap.min.css');
 
 module.exports = {
     entry: __dirname + '/src/main.js',
@@ -13,6 +10,9 @@ module.exports = {
         path: path.resolve(__dirname, './dist'),
         // publicPath: '/dist/',// html中嵌入的script的src的路径
         filename: '[name].[hash].build.js'
+    },
+    resolveLoader: {
+        root: path.join(__dirname, 'node_modules'),
     },
 /*    resolve: {
         alias: {
@@ -24,6 +24,10 @@ module.exports = {
     },*/
     module: {
         loaders: [
+            {
+                test: require.resolve('jquery'),
+                loader: 'expose?jQuery!expose?$'
+            },
             {
                 test: /\.vue$/,
                 loader: 'vue'
@@ -44,6 +48,14 @@ module.exports = {
             {
                 test: /\.html$/,
                 loader: 'vue-html'
+            },
+            {
+                test: /\.(eot|woff|woff2|ttf)([\?]?.*)$/,
+                loader: "file",
+                query: {
+                    limit: 10000,
+                    name: '[name].[hash:7].[ext]'
+                }
             },
             {
                 test: /\.(png|jpg|gif|svg)$/,

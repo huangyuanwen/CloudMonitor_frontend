@@ -1,20 +1,25 @@
-var path = require('path');
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var CleanPlugin = require('clean-webpack-plugin'); //清理文件夹
-// 引入css 单独打包插件
-// require('./src/css/app.css');
-// require('./src/css/bootstrap.min.css');
+let path = require('path')
+let webpack = require('webpack')
+var utils = require('./utils')
+let HtmlWebpackPlugin = require('html-webpack-plugin');
+let ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
     entry: __dirname + '/src/main.js',
     output: {
         path: path.resolve(__dirname, './dist'),
-        publicPath: 'dist/',// html中嵌入的script的src的路径
-        filename: '[name].[hash].build.js'
+        // publicPath:  '/dist/',
+        filename: './js/build.[hash].js'
+    },
+    resolveLoader: {
+        root: path.join(__dirname, 'node_modules'),
     },
     module: {
         loaders: [
+            {
+                test: require.resolve('jquery'),
+                loader: 'expose?jQuery!expose?$'
+            },
             {
                 test: /\.vue$/,
                 loader: 'vue'
@@ -26,7 +31,8 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                loader: 'style-loader!css-loader'
+                exclude: "/node_modules/",
+                loader: ExtractTextPlugin.extract("css-loader")
             },
             {
                 test: /\.json$/,
@@ -37,18 +43,25 @@ module.exports = {
                 loader: 'vue-html'
             },
             {
+                test: /\.(eot|woff|woff2|ttf)([\?]?.*)$/,
+                loader: "file",
+                query: {
+                    limit: 10000,
+                    name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+                }
+            },
+            {
                 test: /\.(png|jpg|gif|svg)$/,
                 loader: 'url',
                 query: {
                     limit: 10000,
-                    name: '[name].[ext]?[hash]'
+                    name: utils.assetsPath('img/[name].[hash:7].[ext]')
                 }
             }
         ]
     },
-    plugins: [
-        //清空输出目录
-        new CleanPlugin(['dist']),
+    plugins:[
+        new ExtractTextPlugin("./css/[name].[hash].css"),
         new HtmlWebpackPlugin({
             inject: true,
             template: 'index.html',
@@ -64,19 +77,8 @@ module.exports = {
                 minifyCSS: true,
                 minifyURLs: true
             }
-        })
+        }),
     ],
-    devServer: {
-        historyApiFallback: true,
-        noInfo: true,
-        proxy: {
-            '/CloudMonitor': {
-                target: 'http://10.7.73.86:8080',
-                changeOrigin: true,
-                secure: false
-            }
-        }
-    },
     devtool: '#eval-source-map'
 }
 

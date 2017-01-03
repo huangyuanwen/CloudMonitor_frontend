@@ -15,13 +15,13 @@
                         <li v-for="(key,group) in all_group" v-on:click.stop="select(group.job_group)">
                             <a>
                                 <div class="input-group">
-                                    <span v-show="edit">{{group.job_group}}</span>
-                                    <input v-show="!edit" type="text" class="input-sm form-control"
+                                    <span v-show="index!=$index">{{group.job_group}}</span>
+                                    <input v-show="index==$index" type="text" class="input-sm form-control"
                                            v-model="group.job_group">
                                     <span class="input-group-btn">
-                                         <button class="btn btn-sm btn-default" v-show="edit"
-                                                 v-on:click.stop="editFunc()">编辑</button>
-                                <button class="btn btn-sm btn-default" v-show="!edit"
+                                         <button class="btn btn-sm btn-default" v-show="index!=$index"
+                                                 v-on:click.stop="editFunc($index)">编辑</button>
+                                <button class="btn btn-sm btn-default" v-show="index==$index"
                                         v-on:click.stop="update(key)">保存</button>
                                 <button class="btn btn-sm btn-default"
                                         v-on:click.stop="del_group(group.job_group)">删除</button>
@@ -116,6 +116,7 @@
         components: {vNav, vSelect},
         data(){
             return {
+                index:"undefind",
                 user_info: JSON.parse(GET_COOKIE('user')),
                 groupName: "",
                 all_group: [],
@@ -175,15 +176,15 @@
                     //  this.find_user_by_group(1, 10, _self.selected);
                 })
             },
-            editFunc(){
-                this.$set('edit', false);
+            editFunc(index){
+                this.$set('index', index);
             },
             update(key){
                 let _self = this;
                 _self.$http.post(GROUP_UPDATE, this.all_group[key]).then((response)=> {
                     _self.GetAllGroup();
                     response.body.code == 0 ? alert(response.body.error) : alert('success!');
-                    this.$set('edit', true);
+                    this.$set('index', 'undefind');
                 })
             },
             del_user(name){

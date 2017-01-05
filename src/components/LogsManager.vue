@@ -29,7 +29,12 @@
                             <td><a class="btn-default btn" @click="del_group()">按组删除</a></td>
                         </tr>
                         <tr>
-                            <!--<td><a @click="del_all()">删除全部日志</a></td>-->
+                            <td>按任务ID删除对应日志</td>
+                            <td>任务ID</td>
+                            <td>
+                                <v-select :value.sync="taskid" multiple :options="taskids"></v-select>
+                            </td>
+                            <td><a class="btn-default btn" @click="del_group()">按任务ID删除</a></td>
                         </tr>
                     </table>
                 </div>
@@ -40,7 +45,14 @@
             </div>
             <div class="row wrapper">
                 <div class="text-right padder">
-                    <v-select :value.sync="selected" :options="options"  style="width: 460px;display: inline-block;"></v-select>
+                   <span style="    position: relative;
+    top: -10px;">任务组:</span>
+                    <v-select :value.sync="selected" :options="options"
+                              style="max-width: 460px;display: inline-block;"></v-select>
+                    <span style="    position: relative;
+    top: -10px;">任务ID:</span>
+                    <v-select :value.sync="taskid_selected" :options="taskids_options"
+                              style="max-width: 460px;display: inline-block;"></v-select>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover">
@@ -57,14 +69,21 @@
                         <tr v-for="data in table">
                             <td>{{data.job_id}}</td>
                             <td>{{data.job_group}}</td>
-                            <td><span class="lang">{{data.response_data}}</span></td>
+                            <td>
+                                <!--<span class="lang">{{data.response_data}}</span>-->
+                                <input style="border: none" readonly class="form-control" type="text"
+                                       value="{{data.response_data}}">
+                            </td>
                             <td>{{data.execute_time}}</td>
                             <td>{{data.result_code}}</td>
                         </tr>
                         </tbody>
                     </table>
                     <!-- 页码栏 -->
-                    <v-nav :cur.sync="cur" :all.sync="totalPage"  class="text-center"></v-nav>
+                    <v-nav v-show="taskid_selected==''" :cur.sync="cur" :all.sync="totalPage"
+                           class="text-center"></v-nav>
+                    <v-nav v-show="taskid_selected!=''" :cur.sync="cur2" :all.sync="totalPage"
+                           class="text-center"></v-nav>
                 </div>
             </div>
         </div>
@@ -77,7 +96,11 @@
             DELETE_LOGS_GROUP_PATH,
             DELETE_LOGS_DAY_PATH,
             DELETE_LOGS_ALL_PATH,
-            FIND_ALL_USER_PATH
+            FIND_ALL_USER_PATH,
+            DELETE_GROUP_BY_TASKID,
+            GET_ALL_TASKID,
+            GET_TASKID_BY_GROUP,
+            GET_TASK_BY_TASKID
     } from '../common-path';
     import {GET_COOKIE} from '../js/cookie'
     import vSelect from 'vue-select'
@@ -90,33 +113,46 @@
     export default{
         data(){
             return {
-                user_info:JSON.parse(GET_COOKIE('user')),
+                user_info: JSON.parse(GET_COOKIE('user')),
                 state: state,
                 cur: 1,
-                totalPage:"",
+                cur2: 1,
+                totalPage: "",
                 table: [],
                 format: 'yyyy-MM-dd',
                 options: [],
+                taskids_options: [],
                 selected: "",
-                group: ""
+                taskid_selected: "",
+                group: "",
+                taskid: "",
+                taskids: [],
             }
         },
         components: {vSelect, Datepicker, vNav},
         ready(){
             this.GetGroup();
+            this.GetAllTaskId();
         },
         watch: {
             selected(val){
-                this.GetData(1, 10, val)
+                this.GetData(1, 10, val);
+                this.GET_TASKID_BY_GROUP(val)
+            },
+            taskid_selected(val){
+                this.GET_TASK_BY_TASKID(1, 10, val)
             },
             cur(val){
                 this.GetData(val, 10, this.selected)
+            },
+            cur2(val){
+                this.GET_TASK_BY_TASKID(val, 10, this.taskid_selected)
             }
         },
         methods: {
-           /* listen(val){
-                this.GetData(val, 10, this.selected)
-            },*/
+            /* listen(val){
+             this.GetData(val, 10, this.selected)
+             },*/
             GetGroup(){
                 this.$http.post(GET_GROUP_BY_USER, {"username": JSON.parse(GET_COOKIE('user')).username})
                         .then((response)=> {
@@ -127,15 +163,33 @@
 //                            this.GetData(1, 10, this.selected);
                         })
             },
-            GetData(pageNo, pageSize, group){
-                this.$http.post(FIND_LOGS_PATH, {
-                    "pageSize": pageSize,
-                    "pageNum": pageNo,
-                    "jobGroup": group
+            GetAllTaskId(){
+                this.$http.get(GET_ALL_TASKID).then((response)=> {
+                    this.$set('taskids', response.data.data)
+                })
+            },
+            GET_TASKID_BY_GROUP(job_group){
+                this.$http.post(GET_TASKID_BY_GROUP, {job_group}).then((response)=> {
+                    this.$set('taskids_options', response.data.data)
+                })
+            },
+            GET_TASK_BY_TASKID(pageNum, pageSize, job_id){
+                this.$http.post(GET_TASK_BY_TASKID, {
+                    pageNum, pageSize, job_id
                 })
                         .then(function (data) {
                             this.$set('table', data.body.data.data);
-                            this.$set('cur', pageNo);
+                            this.$set('cur2', pageNum);
+                            this.$set('totalPage', data.body.data.totalPage);
+                        })
+            },
+            GetData(pageNum, pageSize, jobGroup){
+                this.$http.post(FIND_LOGS_PATH, {
+                    pageNum, pageSize, jobGroup
+                })
+                        .then(function (data) {
+                            this.$set('table', data.body.data.data);
+                            this.$set('cur', pageNum);
                             this.$set('totalPage', data.body.data.totalPage);
                         })
             },
@@ -144,7 +198,7 @@
                 let d = new Date(this.state.date)
                 let date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
                 this.$http.post(DELETE_LOGS_DAY_PATH, {day: $('.datepicker>input').val()}).then((response)=> {
-                    response.body.code == 0 ? alert(response.body.error): alert('success!');
+                    response.body.code == 0 ? alert(response.body.error) : alert('success!');
                     _self.GetGroup();
                 })
 
@@ -152,7 +206,7 @@
             del_group(){
                 let _self = this;
                 this.$http.post(DELETE_LOGS_GROUP_PATH, {jobGroup: this.group}).then((response)=> {
-                    response.body.code == 0 ? alert(response.body.error): alert('success!');
+                    response.body.code == 0 ? alert(response.body.error) : alert('success!');
                     _self.GetGroup();
                 })
 
@@ -160,7 +214,7 @@
             del_all(){
                 let _self = this;
                 this.$http.post(DELETE_LOGS_ALL_PATH).then((response)=> {
-                    response.body.code == 0 ? alert(response.body.error): alert('success!');
+                    response.body.code == 0 ? alert(response.body.error) : alert('success!');
                     _self.GetGroup();
                 })
             }
@@ -183,8 +237,13 @@
         height: 100%;
         border: none;
     }
-    .no_nomarl tr td{
+
+    .no_nomarl tr td {
         white-space: inherit;
         text-overflow: inherit;
+    }
+
+    .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+        background-color: inherit;
     }
 </style>

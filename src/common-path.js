@@ -68,6 +68,14 @@ export const ALL_GROUP = PORXY_URL+"/group/findAllWithPage";
 export const GROUP_UPDATE = PORXY_URL+"/group/update";
 //删除任务组
 export const DELETE_GROUP = PORXY_URL+"/group/delete";
+//根据任务ID删除日志
+export const DELETE_GROUP_BY_TASKID = PORXY_URL+"/logs/deleteByJobId";
+//获取所有任务id
+export const GET_ALL_TASKID = PORXY_URL+"/monitorJob/getAllJobIDs";
+//获取对应任务组下id
+export const GET_TASKID_BY_GROUP = PORXY_URL+"/monitorJob/getJobIDsByJobGroup";
+//根据任务id查询数据
+export const GET_TASK_BY_TASKID = PORXY_URL+"/logs/findByJobIDWithPage";
 //获取分组下对应用户
 export const FIND_USER_BY_GROUP = PORXY_URL+"/group/getUsersByGroup";
 //添加用户到对应任务组

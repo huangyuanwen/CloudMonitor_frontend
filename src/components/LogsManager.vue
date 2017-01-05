@@ -71,7 +71,7 @@
                             <td>{{data.job_group}}</td>
                             <td>
                                 <!--<span class="lang">{{data.response_data}}</span>-->
-                                <input style="border: none" readonly class="form-control" type="text"
+                                <input style="border: none" readonly class="scroll form-control " type="text"
                                        value="{{data.response_data}}">
                             </td>
                             <td>{{data.execute_time}}</td>
@@ -136,6 +136,7 @@
         },
         watch: {
             selected(val){
+                this.taskid_selected = "";
                 this.GetData(1, 10, val);
                 this.GET_TASKID_BY_GROUP(val)
             },
@@ -199,7 +200,7 @@
                 let date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
                 this.$http.post(DELETE_LOGS_DAY_PATH, {day: $('.datepicker>input').val()}).then((response)=> {
                     response.body.code == 0 ? alert(response.body.error) : alert('success!');
-                    _self.GetGroup();
+                    _self.GetData(1, 10, this.selected);
                 })
 
             },
@@ -207,15 +208,15 @@
                 let _self = this;
                 this.$http.post(DELETE_LOGS_GROUP_PATH, {jobGroup: this.group}).then((response)=> {
                     response.body.code == 0 ? alert(response.body.error) : alert('success!');
-                    _self.GetGroup();
+                    _self.GetData(1, 10, this.selected);
                 })
 
             },
             del_taskid(){
                 let _self = this;
-                this.$http.post(DELETE_GROUP_BY_TASKID,{job_id:this.taskid}).then((response)=> {
+                this.$http.post(DELETE_GROUP_BY_TASKID, {job_id: this.taskid}).then((response)=> {
                     response.body.code == 0 ? alert(response.body.error) : alert('success!');
-                    _self.GetGroup();
+                    _self.GetData(1, 10, this.selected);
                 })
             }
 
@@ -242,4 +243,5 @@
         white-space: inherit;
         text-overflow: inherit;
     }
+
 </style>

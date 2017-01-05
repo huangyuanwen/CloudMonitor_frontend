@@ -89,7 +89,8 @@
                                 <span>{{data.job_id}}</span>
                             </td>
                             <td>
-                                <span class="long">{{data.job_description}}</span>
+                                <!--<span class="long">{{data.job_description}}</span>-->
+                                <input style="border: none" readonly class="form-control scroll" type="text" value="{{data.job_description}}">
                             </td>
                             <td>
                                 <span>{{data.job_group}}</span>
@@ -99,7 +100,7 @@
                             </td>
                             <td>
                                 <!--<span class="long">{{data.url}}</span>-->
-                                <input style="border: none" readonly class="form-control" type="text" value="{{data.url}}">
+                                <input style="border: none" readonly class="form-control scroll" type="text" value="{{data.url}}">
                             </td>
                             <td>
                                 <span>{{data.method}}</span>

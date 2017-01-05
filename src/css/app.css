@@ -3961,3 +3961,6 @@ a.text-black:hover {
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
   background-color: inherit;
 }
+input.scroll:hover{
+  cursor:  text;
+}

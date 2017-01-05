@@ -37,7 +37,7 @@
     export default {
         data() {
             return {
-                isRoot: ''
+                isRoot: ''//判断用户权限
             }
         },
         ready(){

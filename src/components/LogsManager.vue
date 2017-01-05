@@ -34,7 +34,7 @@
                             <td>
                                 <v-select :value.sync="taskid" multiple :options="taskids"></v-select>
                             </td>
-                            <td><a class="btn-default btn" @click="del_group()">按任务ID删除</a></td>
+                            <td><a class="btn-default btn" @click="del_taskid()">按任务ID删除</a></td>
                         </tr>
                     </table>
                 </div>
@@ -211,9 +211,9 @@
                 })
 
             },
-            del_all(){
+            del_taskid(){
                 let _self = this;
-                this.$http.post(DELETE_LOGS_ALL_PATH).then((response)=> {
+                this.$http.post(DELETE_GROUP_BY_TASKID,{job_id:this.taskid}).then((response)=> {
                     response.body.code == 0 ? alert(response.body.error) : alert('success!');
                     _self.GetGroup();
                 })
@@ -241,9 +241,5 @@
     .no_nomarl tr td {
         white-space: inherit;
         text-overflow: inherit;
-    }
-
-    .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
-        background-color: inherit;
     }
 </style>

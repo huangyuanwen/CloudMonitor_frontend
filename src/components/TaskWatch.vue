@@ -98,7 +98,8 @@
                                 <span>{{data.cron_expression}}</span>
                             </td>
                             <td>
-                                <span class="long">{{data.url}}</span>
+                                <!--<span class="long">{{data.url}}</span>-->
+                                <input style="border: none" readonly class="form-control" type="text" value="{{data.url}}">
                             </td>
                             <td>
                                 <span>{{data.method}}</span>

@@ -1,7 +1,7 @@
 {
-  "name": "demo",
+  "name": "CloudMonitor_frontend",
   "description": "A Vue.js project",
-  "author": "keepfool <crmug@outlook.com>",
+  "author": "Me1kro <yu.peng1@pactera.com>",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --hot --config webpack.config.js --progress --content-base dist --history-api-fallback",

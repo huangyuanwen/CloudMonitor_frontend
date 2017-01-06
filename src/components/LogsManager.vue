@@ -167,7 +167,7 @@
             GetAllTaskId(){
                 this.$http.get(GET_ALL_TASKID).then((response)=> {
                     this.$set('taskids', response.data.data)
-                })
+                })//
             },
             GET_TASKID_BY_GROUP(job_group){
                 this.$http.post(GET_TASKID_BY_GROUP, {job_group}).then((response)=> {

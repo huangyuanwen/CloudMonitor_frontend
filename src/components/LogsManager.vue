@@ -137,22 +137,22 @@
         watch: {
             selected(val){
                 this.taskid_selected = "";
-                this.GetData(1, 10, val);
+                this.GetData(1, 30, val);
                 this.GET_TASKID_BY_GROUP(val)
             },
             taskid_selected(val){
-                this.GET_TASK_BY_TASKID(1, 10, val)
+                this.GET_TASK_BY_TASKID(1, 30, val)
             },
             cur(val){
-                this.GetData(val, 10, this.selected)
+                this.GetData(val, 30, this.selected)
             },
             cur2(val){
-                this.GET_TASK_BY_TASKID(val, 10, this.taskid_selected)
+                this.GET_TASK_BY_TASKID(val, 30, this.taskid_selected)
             }
         },
         methods: {
             /* listen(val){
-             this.GetData(val, 10, this.selected)
+             this.GetData(val, 30, this.selected)
              },*/
             GetGroup(){
                 this.$http.post(GET_GROUP_BY_USER, {"username": JSON.parse(GET_COOKIE('user')).username})
@@ -161,7 +161,7 @@
                             _self.$set('selected', response.data.data[0]);
                             _self.$set('options', response.data.data);
                             //进入页面后第一次获取数据
-//                            this.GetData(1, 10, this.selected);
+//                            this.GetData(1, 30, this.selected);
                         })
             },
             GetAllTaskId(){
@@ -200,7 +200,7 @@
                 let date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
                 this.$http.post(DELETE_LOGS_DAY_PATH, {day: $('.datepicker>input').val()}).then((response)=> {
                     response.body.code == 0 ? alert(response.body.error) : alert('success!');
-                    _self.GetData(1, 10, this.selected);
+                    _self.GetData(1, 30, this.selected);
                 })
 
             },
@@ -208,7 +208,7 @@
                 let _self = this;
                 this.$http.post(DELETE_LOGS_GROUP_PATH, {jobGroup: this.group}).then((response)=> {
                     response.body.code == 0 ? alert(response.body.error) : alert('success!');
-                    _self.GetData(1, 10, this.selected);
+                    _self.GetData(1, 30, this.selected);
                 })
 
             },
@@ -216,7 +216,7 @@
                 let _self = this;
                 this.$http.post(DELETE_GROUP_BY_TASKID, {job_id: this.taskid}).then((response)=> {
                     response.body.code == 0 ? alert(response.body.error) : alert('success!');
-                    _self.GetData(1, 10, this.selected);
+                    _self.GetData(1, 30, this.selected);
                 })
             }
 

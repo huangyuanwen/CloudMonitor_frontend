@@ -250,7 +250,7 @@
                     this.$set('table', data.body.data.data);
                     this.$set('cur3', pageNum);
                     this.$set('totalPage', data.body.data.totalPage);
-                })//
+                })
             }
 
         }

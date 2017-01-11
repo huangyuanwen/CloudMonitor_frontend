@@ -48,11 +48,25 @@
                    <span style="    position: relative;
     top: -10px;">任务组:</span>
                     <v-select :value.sync="selected" :options="options"
-                              style="max-width: 460px;display: inline-block;"></v-select>
+                              style="max-width: 460px;display: inline-block;margin: 0 15px 0 5px"></v-select>
                     <span style="    position: relative;
     top: -10px;">任务ID:</span>
                     <v-select :value.sync="taskid_selected" :options="taskids_options"
-                              style="max-width: 460px;display: inline-block;"></v-select>
+                              style="max-width: 460px;display: inline-block;margin: 0 15px 0 5px"></v-select>
+
+                    <div style="display: inline-block;width: 330px;margin: 0 15px 0 5px">
+                        <div class="input-group">
+                        <span class="input-group-btn">
+        <span style="font-size: 14px;">模糊查询响应数据：</span>
+      </span>
+                            <input type="text" class="form-control" v-model="res_value">
+                            <span class="input-group-btn">
+        <button class="btn btn-default" type="button"
+                @click="res_query(1,30,res_value,selected,taskid_selected)">查询</button>
+      </span>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover">
@@ -80,9 +94,11 @@
                         </tbody>
                     </table>
                     <!-- 页码栏 -->
-                    <v-nav v-show="taskid_selected==''" :cur.sync="cur" :all.sync="totalPage"
+                    <v-nav v-show="taskid_selected=='' && res_value==''" :cur.sync="cur" :all.sync="totalPage"
                            class="text-center"></v-nav>
-                    <v-nav v-show="taskid_selected!=''" :cur.sync="cur2" :all.sync="totalPage"
+                    <v-nav v-show="taskid_selected!='' && res_value==''" :cur.sync="cur2" :all.sync="totalPage"
+                           class="text-center"></v-nav>
+                    <v-nav v-show="res_value!=''" :cur.sync="cur3" :all.sync="totalPage"
                            class="text-center"></v-nav>
                 </div>
             </div>
@@ -100,7 +116,8 @@
             DELETE_GROUP_BY_TASKID,
             GET_ALL_TASKID,
             GET_TASKID_BY_GROUP,
-            GET_TASK_BY_TASKID
+            GET_TASK_BY_TASKID,
+            RES_DATA
     } from '../common-path';
     import {GET_COOKIE} from '../js/cookie'
     import vSelect from 'vue-select'
@@ -117,6 +134,7 @@
                 state: state,
                 cur: 1,
                 cur2: 1,
+                cur3: 1,
                 totalPage: "",
                 table: [],
                 format: 'yyyy-MM-dd',
@@ -127,6 +145,7 @@
                 group: "",
                 taskid: "",
                 taskids: [],
+                res_value: ""
             }
         },
         components: {vSelect, Datepicker, vNav},
@@ -137,10 +156,12 @@
         watch: {
             selected(val){
                 this.taskid_selected = "";
+                this.res_value = "";
                 this.GetData(1, 30, val);
                 this.GET_TASKID_BY_GROUP(val)
             },
             taskid_selected(val){
+                this.res_value = "";
                 this.GET_TASK_BY_TASKID(1, 30, val)
             },
             cur(val){
@@ -148,6 +169,9 @@
             },
             cur2(val){
                 this.GET_TASK_BY_TASKID(val, 30, this.taskid_selected)
+            },
+            cur3(val){
+                this.res_query(val, 30, this.res_value, this.selected, this.taskid_selected)
             }
         },
         methods: {
@@ -217,6 +241,15 @@
                 this.$http.post(DELETE_GROUP_BY_TASKID, {job_id: this.taskid}).then((response)=> {
                     response.body.code == 0 ? alert(response.body.error) : alert('success!');
                     _self.GetData(1, 30, this.selected);
+                })
+            },
+            res_query(pageNum, pageSize, select, job_group, job_id){
+                this.$http.post(RES_DATA,
+                        {pageNum, pageSize, select, job_group, job_id}
+                ).then((data)=> {
+                    this.$set('table', data.body.data.data);
+                    this.$set('cur3', pageNum);
+                    this.$set('totalPage', data.body.data.totalPage);
                 })
             }
 

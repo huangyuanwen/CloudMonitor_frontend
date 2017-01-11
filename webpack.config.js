@@ -1,9 +1,11 @@
-let path = require('path')
-let webpack = require('webpack')
-let HtmlWebpackPlugin = require('html-webpack-plugin');
-let ExtractTextPlugin = require("extract-text-webpack-plugin");
-let CleanWebpackPlugin = require('clean-webpack-plugin');
-let fs = require('fs');
+let [path,webpack,HtmlWebpackPlugin,ExtractTextPlugin,CleanWebpackPlugin,fs] = [
+    require('path'),
+    require('webpack'),
+    require('html-webpack-plugin'),
+    require("extract-text-webpack-plugin"),
+    require('clean-webpack-plugin'),
+    require('fs')
+];
 
 module.exports = {
     entry: __dirname + '/src/main.js',

@@ -46,6 +46,8 @@ export const DELETE_LOGS_GROUP_PATH = PORXY_URL + "/logs/deleteByGroup";
 export const DELETE_LOGS_DAY_PATH = PORXY_URL + "/logs/deleteByDay";
 //删除所有日志
 export const DELETE_LOGS_ALL_PATH = PORXY_URL + "/logs/deleteAll";
+//模糊查询响应数据
+export const RES_DATA = PORXY_URL+"/logs/findByResponseDataWithPage";
 /**
  * 用户管理
  * @type {string}
